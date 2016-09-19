@@ -1,0 +1,17 @@
+{
+  "name": "shmuprpg",
+  "version": "0.1.0",
+  "description": "shmuprpg",
+  "scripts": {
+    "start": "brunch watch --server",
+    "prod": "brunch build --production"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": "^2.7.1",
+    "brunch": "^2.8.2",
+    "brunch-typescript": "1.8.1"
+  },
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
