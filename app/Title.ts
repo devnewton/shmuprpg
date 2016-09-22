@@ -10,7 +10,7 @@ export class Title extends AbstractState {
     }
 
     preload() {
-        this.game.load.image('logo', 'logo.png');
+        this.game.load.image('logo', 'title/logo.png');
     }
 
     create() {

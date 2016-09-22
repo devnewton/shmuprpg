@@ -10,14 +10,11 @@ export class Intro extends AbstractState {
     }
 
     preload() {
-        this.game.load.video('intro', 'intro.webm');
-        //this.game.load.image('logo', 'logo.png');
+        this.game.load.video('intro', 'intro/intro.webm');
     }
 
     create() {
         super.create();
-        /*var logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
-        logo.anchor.setTo(0.5, 0.5);*/
         var video = this.game.add.video('intro', );
         video.play();
         video.addToWorld(this.game.world.centerX, this.game.world.centerY, 0.5, 0.5);
