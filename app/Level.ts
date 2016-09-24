@@ -30,13 +30,13 @@ export class Level extends AbstractState {
                 frameData.addFrame(spriteFrame);
             }
         }
+        sprite.data = 
         sprite.animations.copyFrameData(frameData, 0);
-
         let frameIndex = 0;
         for (const animation of nanimJson.animations) {
             const frameIndexes = new Array<number>();
             for (const f of animation.frames) {
-                frameIndexes.push(frameIndex);
+                frameIndexes.push(frameIndex++);
             }
             if (frameIndexes.length > 0) {
                 sprite.animations.add(animation.name, frameIndexes);
@@ -46,9 +46,11 @@ export class Level extends AbstractState {
 
     create() {
         super.create();
-        const sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY);
+        const sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira');
+        sprite.scale.x = 2;
+        sprite.scale.y = 2;
         this.loadAnimations(sprite, this.cache.getJSON('lpc'));
-        sprite.animations.play("lpc.spellcast.back", 125, true);
+        sprite.play("lpc.spellcast.front", 2, true);
         sprite.anchor.setTo(0.5, 0.5);
     }
 }
