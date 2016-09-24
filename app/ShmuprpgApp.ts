@@ -1,6 +1,7 @@
 /// <reference path="../typings/phaser.d.ts"/>
 import {Intro} from "./Intro.ts";
 import {Title} from "./Title.ts";
+import {Level} from "./Level.ts";
 
 class ShmuprpgApp {
 
@@ -13,6 +14,7 @@ class ShmuprpgApp {
         });
         this.game.state.add('Intro', Intro);
         this.game.state.add('Title', Title);
+        this.game.state.add('Level', Level);
     }
 
     preload() {
@@ -23,7 +25,7 @@ class ShmuprpgApp {
     }
 
     create() {
-        this.game.state.start('Intro');
+        this.game.state.start('Level');
     }
 }
 

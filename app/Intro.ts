@@ -3,8 +3,6 @@ import { AbstractState } from "./AbstractState.ts"; // you import only AClass
 
 export class Intro extends AbstractState {
 
-    game: Phaser.Game;
-
     constructor() {
         super();
     }
