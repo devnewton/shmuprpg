@@ -15,7 +15,7 @@ export class Intro extends AbstractState {
 
     create() {
         super.create();
-        var video = this.game.add.video('intro', );
+        var video = this.game.add.video('intro');
         video.play();
         video.addToWorld(this.game.world.centerX, this.game.world.centerY, 0.5, 0.5);
         video.onComplete.add(() => this.game.state.start('Title'));
