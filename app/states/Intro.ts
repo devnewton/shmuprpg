@@ -1,4 +1,4 @@
-/// <reference path="../typings/phaser.d.ts"/>
+/// <reference path="../../typings/phaser.d.ts"/>
 import { AbstractState } from "./AbstractState.ts"; // you import only AClass
 
 export class Intro extends AbstractState {

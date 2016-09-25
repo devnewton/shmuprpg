@@ -1,4 +1,4 @@
-/// <reference path="../typings/phaser.d.ts"/>
+/// <reference path="../../typings/phaser.d.ts"/>
 export abstract class AbstractState extends Phaser.State {
 
     constructor() {
