@@ -8,7 +8,7 @@ export class Hero {
 
     constructor(game: Phaser.Game) {
         this.game = <ShmuprpgGame>game;
-        this.game.nanim.load('tobira', 'sprites/lpc.json', 'sprites/tobira.png')
+        this.game.nanim.load('tobira', 'sprites/lpc-characters/lpc.json', 'sprites/lpc-characters/tobira.png')
     }
 
     create() {
