@@ -26,21 +26,25 @@ export class Hero {
 
         if (this.game.controls.isGoingLeft()) {
             this.sprite.body.velocity.x = -300;
-            this.sprite.play("lpc.walk.left", 8, false);
         } else if (this.game.controls.isGoingRight()) {
             this.sprite.body.velocity.x = 300;
-            this.sprite.play("lpc.walk.right", 8, false);
         }
 
         if (this.game.controls.isGoingUp()) {
             this.sprite.body.velocity.y = -300;
-            this.sprite.play("lpc.walk.back", 8, false);
         } else if (this.game.controls.isGoingDown()) {
             this.sprite.body.velocity.y = 300;
-            this.sprite.play("lpc.walk.front", 8, false);
         }
-        
-        if(this.sprite.body.velocity.x == 0 && this.sprite.body.velocity.y == 0) {
+
+        if (this.sprite.body.velocity.y < 0) {
+            this.sprite.play("lpc.walk.back", 8, false);
+        } else if (this.sprite.body.velocity.y > 0) {
+            this.sprite.play("lpc.walk.front", 8, false);
+        } else if (this.sprite.body.velocity.x < 0) {
+            this.sprite.play("lpc.walk.left", 8, false);
+        } else if (this.sprite.body.velocity.x > 0) {
+            this.sprite.play("lpc.walk.right", 8, false);
+        } else {
             this.sprite.play("lpc.hurt", 0, false);
         }
 
