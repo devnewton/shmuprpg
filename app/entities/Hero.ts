@@ -12,12 +12,13 @@ export class Hero {
     }
 
     create() {
-        this.sprite = this.game.nanim.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira')
-        this.sprite.scale.x = 2;
-        this.sprite.scale.y = 2;
+        this.sprite = this.game.nanim.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira');
         this.sprite.play("lpc.spellcast.front", 2, true);
         this.sprite.anchor.setTo(0.5, 0.5);
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+        
+        this.sprite.body.setSize(16, 16, 24, 48);
+        this.sprite.body.collideWorldBounds = true;
     }
 
     update() {

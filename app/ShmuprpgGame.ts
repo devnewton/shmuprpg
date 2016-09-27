@@ -11,7 +11,7 @@ export class ShmuprpgGame extends Phaser.Game {
     controls: Controls;
 
     constructor() {
-        super(1920, 1080, Phaser.AUTO, 'game', {
+        super(1920, 1080, Phaser.CANVAS, 'game', {
             preload: () => this.preloadGame()
             , create: () => this.createGame()
         });
