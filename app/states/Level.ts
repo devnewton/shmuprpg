@@ -51,7 +51,6 @@ export class Level extends AbstractState {
         }
 
         this.hero.create();
-
     }
 
     update() {

@@ -1,14 +1,17 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import { ShmuprpgGame } from "../ShmuprpgGame.ts";
+import { MachineGun } from "./MachineGun.ts";
 
 export class Hero {
 
     game: ShmuprpgGame;
     sprite: Phaser.Sprite;
+    weapon: MachineGun;
 
     constructor(game: Phaser.Game) {
         this.game = <ShmuprpgGame>game;
-        this.game.nanim.load('tobira', 'sprites/lpc-characters/lpc.json', 'sprites/lpc-characters/tobira.png')
+        this.game.nanim.load('tobira', 'sprites/lpc/characters/lpc.json', 'sprites/lpc/characters/tobira.png');
+        this.game.load.spritesheet('bullet', 'sprites/lpc/shootemup/effects01.png', 16, 16, 4);
     }
 
     create() {
@@ -16,9 +19,10 @@ export class Hero {
         this.sprite.play("lpc.spellcast.front", 2, true);
         this.sprite.anchor.setTo(0.5, 0.5);
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
-        
         this.sprite.body.setSize(16, 16, 24, 48);
         this.sprite.body.collideWorldBounds = true;
+        this.weapon = new MachineGun(this.game);
+        this.game.add.existing(this.weapon);
     }
 
     update() {
@@ -47,6 +51,11 @@ export class Hero {
             this.sprite.play("lpc.walk.right", 8, false);
         } else {
             this.sprite.play("lpc.hurt", 0, false);
+        }
+
+        const shootingAngle = this.game.controls.shootingAngle(this.sprite.x, this.sprite.y);
+        if (shootingAngle != null) {
+            this.weapon.fire(this.sprite.x, this.sprite.y, shootingAngle);
         }
 
     }
