@@ -3,11 +3,9 @@ import {Intro} from "./states/Intro.ts";
 import {Title} from "./states/Title.ts";
 import {Level} from "./states/Level.ts";
 import {Controls} from "./utils/Controls.ts";
-import { nanim } from "./utils/nanim.ts";
 
 export class ShmuprpgGame extends Phaser.Game {
-    
-    nanim: nanim.NanimLoader;
+
     controls: Controls;
 
     constructor() {
@@ -15,7 +13,6 @@ export class ShmuprpgGame extends Phaser.Game {
             preload: () => this.preloadGame()
             , create: () => this.createGame()
         });
-        this.nanim = new nanim.NanimLoader(this);
         this.state.add('Intro', Intro);
         this.state.add('Title', Title);
         this.state.add('Level', Level);
@@ -32,4 +29,17 @@ export class ShmuprpgGame extends Phaser.Game {
         this.controls = new Controls(this);
         this.state.start('Level');
     }
+
+    addSpriteAnimation(sprite: Phaser.Sprite, animationName: string, frameCount: number): Phaser.Animation {
+        return sprite.animations.add(animationName, this.genAnimArray(animationName, frameCount));
+    }
+
+    private genAnimArray(name: string, n: number) {
+        let result = new Array<string>();
+        for (let i = 0; i < n; ++i) {
+            result.push(name + i);
+        }
+        return result;
+    }
+
 }

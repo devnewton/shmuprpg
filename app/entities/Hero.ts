@@ -10,13 +10,18 @@ export class Hero {
 
     constructor(game: Phaser.Game) {
         this.game = <ShmuprpgGame>game;
-        this.game.nanim.load('tobira', 'sprites/lpc/characters/lpc.json', 'sprites/lpc/characters/tobira.png');
+        this.game.load.atlasXML('tobira', 'sprites/lpc/characters/tobira.png', 'sprites/lpc/characters/lpc.xml')
         this.game.load.spritesheet('bullet', 'sprites/lpc/shootemup/effects01.png', 16, 16, 4);
     }
 
     create() {
-        this.sprite = this.game.nanim.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira');
-        this.sprite.play("lpc.spellcast.front", 2, true);
+        this.sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira');
+        this.game.addSpriteAnimation(this.sprite, 'lpc.hurt', 6);
+        this.game.addSpriteAnimation(this.sprite, 'lpc.walk.back', 9);
+        this.game.addSpriteAnimation(this.sprite, 'lpc.walk.front', 9);
+        this.game.addSpriteAnimation(this.sprite, 'lpc.walk.left', 9);
+        this.game.addSpriteAnimation(this.sprite, 'lpc.walk.right', 9);
+        this.sprite.play("lpc.hurt", 0, false);
         this.sprite.anchor.setTo(0.5, 0.5);
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
         this.sprite.body.setSize(16, 16, 24, 48);
