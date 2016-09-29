@@ -1,11 +1,14 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import { AbstractState } from "./AbstractState.ts";
 import { Hero } from "../entities/Hero.ts";
+import {BirdFlock} from "../entities/BirdFlock.ts";
+
 
 export class Level extends AbstractState {
 
     hero: Hero;
     collisionSprites: Phaser.Group;
+    birdFlock: BirdFlock;
 
     constructor() {
         super();
@@ -13,6 +16,7 @@ export class Level extends AbstractState {
 
     preload() {
         this.hero = new Hero(this.game);
+        BirdFlock.preload(this.game);
         this.game.load.tilemap('map', 'levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('terrains', 'sprites/lpc/terrains/terrains.png');
         this.game.load.image('cottage', 'sprites/lpc/thatched-roof-cottage/cottage.png');
@@ -51,6 +55,9 @@ export class Level extends AbstractState {
         }
 
         this.hero.create();
+        this.game.add
+        this.birdFlock = new BirdFlock(this.hero.sprite);
+        this.game.add.existing(this.birdFlock);
     }
 
     update() {
