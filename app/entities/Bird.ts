@@ -2,6 +2,8 @@
 
 export class Bird extends Phaser.Sprite {
 
+    birdExplosion: Phaser.Sprite;
+
     constructor(game: Phaser.Game) {
         super(game, 0, 0, 'bird');
         this.animations.add('fly');
@@ -10,6 +12,11 @@ export class Bird extends Phaser.Sprite {
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
         this.exists = false;
+        this.birdExplosion = this.game.add.sprite(this.x, this.y, 'bird-explosion');
+        this.birdExplosion.anchor.setTo(0.5, 0.5);
+        this.birdExplosion.exists = false;
+        const explodeAnimation = this.birdExplosion.animations.add('explode');
+        explodeAnimation.killOnComplete = true;
     }
 
     fly(fromX: number, fromY: number, angle: number) {
@@ -24,5 +31,12 @@ export class Bird extends Phaser.Sprite {
             this.scale.set(this.body.velocity.x < 0 ? -1 : 1, 1);
         });
         beforeBirdAnimation.play(4, false);
+    }
+
+    kill(): Phaser.Sprite {
+        super.kill();
+        this.birdExplosion.reset(this.x, this.y);
+        this.birdExplosion.play('explode', 8, false);
+        return this;
     }
 }

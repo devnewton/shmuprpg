@@ -2,6 +2,7 @@
 import {Intro} from "./states/Intro.ts";
 import {Title} from "./states/Title.ts";
 import {Level} from "./states/Level.ts";
+import {GameOver} from "./states/GameOver.ts"
 import {Controls} from "./utils/Controls.ts";
 
 export class ShmuprpgGame extends Phaser.Game {
@@ -16,6 +17,7 @@ export class ShmuprpgGame extends Phaser.Game {
         this.state.add('Intro', Intro);
         this.state.add('Title', Title);
         this.state.add('Level', Level);
+        this.state.add('GameOver', GameOver);
     }
 
     preloadGame() {

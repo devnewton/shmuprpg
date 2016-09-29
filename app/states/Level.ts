@@ -63,6 +63,14 @@ export class Level extends AbstractState {
     update() {
         this.hero.update();
         this.game.physics.arcade.collide(this.hero.sprite, this.collisionSprites);
+        this.game.physics.arcade.overlap(this.birdFlock, this.hero.weapon, (bird: Phaser.Sprite, bullet: Phaser.Sprite) => {
+            bird.kill();
+            bullet.kill();
+        });
+        this.game.physics.arcade.overlap(this.hero.sprite, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
+            bird.kill();
+            this.hero.damage(1);
+        });
     }
 
     render() {

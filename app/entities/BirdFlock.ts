@@ -17,7 +17,8 @@ export class BirdFlock extends Phaser.Group {
 
     static preload(game: Phaser.Game) {
         game.load.spritesheet('bird', 'sprites/oga/tower-defense-prototyping-assets-4-monsters-some-tiles-a-background-image/bird.png', 48, 48, 5);
-        game.load.spritesheet('before-bird','sprites/oga/rpg-special-move-effects/VioletSlash.png', 64, 64, 4);
+        game.load.spritesheet('before-bird', 'sprites/oga/rpg-special-move-effects/VioletSlash.png', 64, 64, 4);
+        game.load.spritesheet('bird-explosion', 'sprites/oga/space_shooter_pack/explosion.png', 16, 16, 5);
     }
 
     update() {

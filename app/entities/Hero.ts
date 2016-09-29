@@ -16,6 +16,7 @@ export class Hero {
 
     create() {
         this.sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'tobira');
+        this.sprite.health = 3;
         this.game.addSpriteAnimation(this.sprite, 'lpc.hurt', 6);
         this.game.addSpriteAnimation(this.sprite, 'lpc.walk.back', 9);
         this.game.addSpriteAnimation(this.sprite, 'lpc.walk.front', 9);
@@ -61,6 +62,20 @@ export class Hero {
         const shootingAngle = this.game.controls.shootingAngle(this.sprite.x, this.sprite.y);
         if (shootingAngle != null) {
             this.weapon.fire(this.sprite.x, this.sprite.y, shootingAngle);
+        }
+
+    }
+
+    invincible = false;
+
+    damage(amount: number) {
+        if (!this.invincible) {
+            this.invincible = true;
+            this.game.add.tween(this.sprite).from({ tint: 0xFF0000 }).to({ tint: 0xFFFFFF }, 1000, Phaser.Easing.Linear.None, true, 0, 4, false).onComplete.add(() => this.invincible = false);
+            this.sprite.damage(1);
+            if (!this.sprite.alive) {
+                this.game.state.start('GameOver')
+            }
         }
 
     }
