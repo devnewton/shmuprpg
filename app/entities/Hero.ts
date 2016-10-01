@@ -10,7 +10,7 @@ export class Hero {
 
     constructor(game: Phaser.Game) {
         this.game = <ShmuprpgGame>game;
-        this.game.load.atlasXML('tobira', 'sprites/lpc/characters/tobira.png', 'sprites/lpc/characters/lpc.xml')
+        this.game.load.atlasXML('tobira', 'sprites/lpc/characters/tobira.png', 'sprites/lpc/characters/lpc.xml');
         this.game.load.spritesheet('bullet', 'sprites/lpc/shootemup/effects01.png', 16, 16, 4);
     }
 

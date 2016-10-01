@@ -2,7 +2,7 @@
 import {Intro} from "./states/Intro.ts";
 import {Title} from "./states/Title.ts";
 import {Level} from "./states/Level.ts";
-import {GameOver} from "./states/GameOver.ts"
+import {GameOver} from "./states/GameOver.ts";
 import {Controls} from "./utils/Controls.ts";
 
 export class ShmuprpgGame extends Phaser.Game {
