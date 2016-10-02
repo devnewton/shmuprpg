@@ -20,9 +20,9 @@ export class Level extends AbstractState {
     }
 
     preload() {
-        this.hero = new Hero(this.game);
         BirdFlock.preload(this.game);
         GrobelinHorde.preload(this.game);
+        Hero.preload(this.game);
         this.game.load.tilemap('map', 'levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('terrains', 'sprites/lpc/terrains/terrains.png');
         this.game.load.image('cottage', 'sprites/lpc/thatched-roof-cottage/cottage.png');
@@ -62,25 +62,26 @@ export class Level extends AbstractState {
                 this.collisionSprites.add(sprite);
             }
         }
-        
+
         this.pathfinder = new Pathfinder(map);
 
-        this.hero.create();
-        this.birdFlock = new BirdFlock(this.hero.sprite, 0);
+        this.hero = new Hero(this.game);
+        this.game.add.existing(this.hero);
+        this.birdFlock = new BirdFlock(this.hero, 0);
         this.game.add.existing(this.birdFlock);
-        this.grobelinHorde = new GrobelinHorde(this.hero.sprite);
+        this.grobelinHorde = new GrobelinHorde(this.hero);
         this.game.add.existing(this.grobelinHorde);
     }
 
     update() {
         this.pathfinder.update();
         this.hero.update();
-        this.game.physics.arcade.collide(this.hero.sprite, this.collisionSprites);
+        this.game.physics.arcade.collide(this.hero, this.collisionSprites);
         this.game.physics.arcade.overlap(this.birdFlock, this.hero.weapon, (bird: Phaser.Sprite, bullet: Phaser.Sprite) => {
             bird.kill();
             bullet.kill();
         });
-        this.game.physics.arcade.overlap(this.hero.sprite, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
+        this.game.physics.arcade.overlap(this.hero, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
             bird.kill();
             this.hero.damage(1);
         });
@@ -91,13 +92,13 @@ export class Level extends AbstractState {
             this.game.debug.body(<Phaser.Sprite>s);
         }
         this.game.debug.body(this.hero.sprite);*/
-     /* for(let c of this.grobelinHorde.children) {
-            const s = <Grobelin>c;
-            this.game.debug.body(s);
-            this.game.debug.geom(new Phaser.Point(s.body.center.x, s.body.center.y), '#ff0000');
-            for (let p of s.path) {
-                this.game.debug.geom(new Phaser.Point(p.x, p.y), '#0000FF');
-            }
-        }*/
+        /* for(let c of this.grobelinHorde.children) {
+               const s = <Grobelin>c;
+               this.game.debug.body(s);
+               this.game.debug.geom(new Phaser.Point(s.body.center.x, s.body.center.y), '#ff0000');
+               for (let p of s.path) {
+                   this.game.debug.geom(new Phaser.Point(p.x, p.y), '#0000FF');
+               }
+           }*/
     }
 }
