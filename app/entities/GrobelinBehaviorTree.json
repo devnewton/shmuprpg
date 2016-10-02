@@ -1,0 +1,123 @@
+{
+    "title": "Grobelin behavior tree",
+    "description": "",
+    "root": "32f94332-93da-4c43-9b3d-cc2f33a473e2",
+    "display": {
+        "camera_x": 540.5,
+        "camera_y": 439.5,
+        "camera_z": 1,
+        "x": -224,
+        "y": -176.00000000000003
+    },
+    "properties": {},
+    "nodes": {
+        "42f725fe-8d8b-4325-87c4-2911eccf5003": {
+            "id": "42f725fe-8d8b-4325-87c4-2911eccf5003",
+            "name": "CanAttack",
+            "title": "IsNearEnemy",
+            "description": "",
+            "display": {
+                "x": 400,
+                "y": -293.33333333333337
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "32f94332-93da-4c43-9b3d-cc2f33a473e2": {
+            "id": "32f94332-93da-4c43-9b3d-cc2f33a473e2",
+            "name": "Priority",
+            "title": "Priority",
+            "description": "",
+            "display": {
+                "x": -16,
+                "y": -176.00000000000003
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "adda17fa-5c0e-4b94-8713-86bc2160dc76",
+                "74619d1d-a9d8-4902-9a6d-77582dc61e58",
+                "15b81665-001c-4ff6-8fc9-c0174ae15416"
+            ]
+        },
+        "adda17fa-5c0e-4b94-8713-86bc2160dc76": {
+            "id": "adda17fa-5c0e-4b94-8713-86bc2160dc76",
+            "name": "Sequence",
+            "title": "Attack",
+            "description": "",
+            "display": {
+                "x": 192,
+                "y": -261.33333333333337
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "42f725fe-8d8b-4325-87c4-2911eccf5003",
+                "4d0fb23e-1431-4fbf-8b05-424831e12f89"
+            ]
+        },
+        "4d0fb23e-1431-4fbf-8b05-424831e12f89": {
+            "id": "4d0fb23e-1431-4fbf-8b05-424831e12f89",
+            "name": "Attack",
+            "title": "AttackEnemy",
+            "description": "",
+            "display": {
+                "x": 400,
+                "y": -229.33333333333337
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "15b81665-001c-4ff6-8fc9-c0174ae15416": {
+            "id": "15b81665-001c-4ff6-8fc9-c0174ae15416",
+            "name": "MoveToHero",
+            "title": "SearchAPathToEnemy",
+            "description": "",
+            "display": {
+                "x": 192,
+                "y": -101.33333333333337
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "74619d1d-a9d8-4902-9a6d-77582dc61e58": {
+            "id": "74619d1d-a9d8-4902-9a6d-77582dc61e58",
+            "name": "FollowPath",
+            "title": "FollowPath",
+            "description": "",
+            "display": {
+                "x": 192,
+                "y": -165.33333333333337
+            },
+            "parameters": {},
+            "properties": {}
+        }
+    },
+    "custom_nodes": [
+        {
+            "name": "CanAttack",
+            "title": "",
+            "category": "condition"
+        },
+        {
+            "name": "Attack",
+            "title": "",
+            "category": "action"
+        },
+        {
+            "name": "MoveToHero",
+            "title": "",
+            "category": "action"
+        },
+        {
+            "name": "HasPath",
+            "title": "",
+            "category": "condition"
+        },
+        {
+            "name": "FollowPath",
+            "title": "",
+            "category": "action"
+        }
+    ]
+}
