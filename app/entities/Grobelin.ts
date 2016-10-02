@@ -8,7 +8,6 @@ export class Grobelin extends Phaser.Sprite {
     enemy: Phaser.Sprite;
     path = new Array<Phaser.Point>();
     currentPathPointTarget: Phaser.Point;
-    attack = false;
     thinking = false;
     private pathfinder: Pathfinder;
 
@@ -53,7 +52,6 @@ export class Grobelin extends Phaser.Sprite {
         super.update();
         if (this.exists) {
             this.executeBehaviorTree();
-            this.animate();
         }
     }
 
@@ -70,11 +68,10 @@ export class Grobelin extends Phaser.Sprite {
     }
 
     private condition_IsNearEnemy(): boolean {
-        return this.attack = this.enemy && Phaser.Math.distance(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y) < this.body.width * 2;
+        return this.enemy && Phaser.Math.distance(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y) < this.body.width * 2;
     }
 
     private action_AttackEnemy(): boolean {
-        this.attack = true;
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         const dx = this.enemy.body.center.x - this.body.center.x;
@@ -125,7 +122,7 @@ export class Grobelin extends Phaser.Sprite {
         return true;
     }
 
-    action_FollowPath_Animate() {
+    private action_FollowPath_Animate() {
         if (Math.abs(this.body.velocity.x) > Math.abs(this.body.velocity.y)) {
             if (this.body.velocity.x < 0) {
                 this.play("lpc.walk.left", 8, false);
@@ -170,13 +167,5 @@ export class Grobelin extends Phaser.Sprite {
             });
         }
         return this.path.length == 0;
-    }
-
-    private animate() {
-        if (this.attack) {
-
-        } else {
-
-        }
     }
 }
