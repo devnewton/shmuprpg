@@ -21,6 +21,7 @@ export class Pathfinder {
         }
         this.easystar = new EasyStar.js();
         this.easystar.setGrid(grid);
+        this.easystar.enableDiagonals();
         this.easystar.setAcceptableTiles([1]);
     }
 
@@ -48,13 +49,16 @@ export class Pathfinder {
         const tileEnd = this.findNearestWalkableTile(endX, endY);
         if (tileEnd) {
             this.easystar.findPath(tileStart.x, tileStart.y, tileEnd.x, tileEnd.y, (path: { x: number, y: number }[]) => {
-                const worldPath = new Array<Phaser.Point>((path && path.length) || 0);
-                if (path) {
-                    for (let i = 0; i < path.length; ++i) {
+                let worldPath: Array<Phaser.Point>;
+                if (path && path.length>1) {
+                    worldPath = new Array<Phaser.Point>(path.length-1);
+                    for (let i = 1; i < path.length; ++i) {
                         const tile = this.map.getTile(path[i].x, path[i].y);
-                        worldPath[i] = new Phaser.Point(tile.worldX + tile.width / 2, tile.worldY + tile.height / 2);
+                        worldPath[i-1] = new Phaser.Point(tile.worldX + tile.width / 2, tile.worldY + tile.height / 2);
                     }
-                }
+                } else {
+                    worldPath = new Array<Phaser.Point>();
+                }                
                 callback(worldPath);
             });
         } else {
