@@ -69,7 +69,7 @@ export class Level extends AbstractState {
         this.game.add.existing(this.hero);
         this.birdFlock = new BirdFlock(this.hero, 0);
         this.game.add.existing(this.birdFlock);
-        this.grobelinHorde = new GrobelinHorde(this.hero);
+        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder);
         this.game.add.existing(this.grobelinHorde);
     }
 

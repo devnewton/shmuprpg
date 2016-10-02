@@ -1,5 +1,6 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import {Level} from "../states/Level.ts";
+import { Pathfinder } from "../utils/Pathfinder.ts";
 
 export class Grobelin extends Phaser.Sprite {
 
@@ -9,9 +10,11 @@ export class Grobelin extends Phaser.Sprite {
     currentPathPointTarget: Phaser.Point;
     attack = false;
     thinking = false;
+    private pathfinder: Pathfinder;    
 
-    constructor(game: Phaser.Game) {
+    constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
+        this.pathfinder = pathfinder;
         this.animations.add('fly');
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.anchor.setTo(0.5, 0.5);
@@ -91,8 +94,7 @@ export class Grobelin extends Phaser.Sprite {
     think() {
         if (!this.attack && !this.thinking && !this.currentPathPointTarget && this.path.length == 0) {
             this.thinking = true;
-            const pathfinder = (<Level>this.game.state.getCurrentState()).pathfinder;
-            pathfinder.findPath(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y, (path: Phaser.Point[]) => {
+            this.pathfinder.findPath(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y, (path: Phaser.Point[]) => {
                 this.path = path || new Array<Phaser.Point>();
                 this.thinking = false;
             });

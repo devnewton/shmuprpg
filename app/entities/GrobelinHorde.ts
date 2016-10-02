@@ -2,6 +2,7 @@
 import {Grobelin} from "./Grobelin.ts";
 import { ShmuprpgGame } from "../ShmuprpgGame.ts";
 import { Level } from "../states/Level.ts";
+import { Pathfinder } from "../utils/Pathfinder.ts";
 
 
 export class GrobelinHorde extends Phaser.Group {
@@ -9,9 +10,11 @@ export class GrobelinHorde extends Phaser.Group {
     appearsRate = 1000;
     target: Phaser.Sprite;
     private nextAppearsTime = 0;
+    private pathfinder: Pathfinder;
 
-    constructor(target: Phaser.Sprite, maxGrobelins: number = 4) {
+    constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 4) {
         super(target.game);
+        this.pathfinder = pathFinder;
         this.target = target;
         for (let i = 0; i < maxGrobelins; ++i) {
             this.add(this.createGrobelin());
@@ -28,7 +31,7 @@ export class GrobelinHorde extends Phaser.Group {
     }
 
     private createGrobelin(): Grobelin {
-        const grobelin = new Grobelin(this.game);
+        const grobelin = new Grobelin(this.game, this.pathfinder);
         const game = <ShmuprpgGame>this.game;
         game.addSpriteAnimation(grobelin, 'lpc.hurt', 6);
         game.addSpriteAnimation(grobelin, 'lpc.walk.back', 9);
@@ -44,9 +47,9 @@ export class GrobelinHorde extends Phaser.Group {
 
     private appears() {
         if (this.game.time.time >= this.nextAppearsTime) {
-            const grobelin = this.getFirstExists(false);
+            const grobelin = <Grobelin>this.getFirstExists(false);
             if (grobelin) {
-                const pos = (<Level>this.game.state.getCurrentState()).pathfinder.randomWalkablePos();
+                const pos = this.pathfinder.randomWalkablePos();
                 grobelin.appears(pos.x, pos.y, this.target);
                 this.nextAppearsTime = this.game.time.time + this.appearsRate;
             }

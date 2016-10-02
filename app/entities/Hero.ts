@@ -32,6 +32,7 @@ export class Hero extends Phaser.Sprite {
     }
 
     update() {
+        super.update();
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
