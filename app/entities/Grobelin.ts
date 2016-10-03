@@ -10,6 +10,8 @@ export class Grobelin extends Phaser.Sprite {
     currentPathPointTarget: Phaser.Point;
     thinking = false;
     private pathfinder: Pathfinder;
+    private attackAnimation: Phaser.Animation;
+    private attackDangerousOffset: Phaser.Point;
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
@@ -74,34 +76,54 @@ export class Grobelin extends Phaser.Sprite {
     private action_AttackEnemy(): boolean {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
+        if (!this.attackAnimation) {
+            [this.attackAnimation, this.attackDangerousOffset] = this.action_AttackEnemy_PlayAnimation();
+        } else if (this.attackAnimation.isFinished) {
+            this.attackAnimation = null;
+            const enemyRectangle = new Phaser.Rectangle(this.enemy.left, this.enemy.top, this.enemy.width, this.enemy.height);
+            if (Phaser.Rectangle.containsPoint(enemyRectangle, this.getAttackPoint())) {
+                this.enemy.damage(1);
+            }
+        }
+        return true;
+    }
+
+    getAttackPoint(): Phaser.Point {
+        if (this.attackDangerousOffset) {
+            return new Phaser.Point(this.body.center.x + this.attackDangerousOffset.x, this.body.center.y + this.attackDangerousOffset.y);
+        } else {
+            return null;
+        }
+    }
+
+    private action_AttackEnemy_PlayAnimation(): [Phaser.Animation, Phaser.Point] {
         const dx = this.enemy.body.center.x - this.body.center.x;
         const dy = this.enemy.body.center.y - this.body.center.y;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx < 0) {
-                this.play("lpc.thrust.left", 8, false);
+                return [this.play("lpc.thrust.left", 8, false), new Phaser.Point(-24, -16)];
             } else if (dx > 0) {
-                this.play("lpc.thrust.right", 8, false);
+                return [this.play("lpc.thrust.right", 8, false), new Phaser.Point(24, -16)];
             } else if (dy < 0) {
-                this.play("lpc.thrust.back", 8, false);
+                return [this.play("lpc.thrust.back", 8, false), new Phaser.Point(8, -48)];
             } else if (dy > 0) {
-                this.play("lpc.thrust.front", 8, false);
+                return [this.play("lpc.thrust.front", 8, false), new Phaser.Point(-8, 8)];
             } else {
-                this.play("lpc.thrust.right", 8, false);
+                return [this.play("lpc.thrust.right", 8, false), new Phaser.Point(24, -16)];
             }
         } else {
             if (dy < 0) {
-                this.play("lpc.thrust.back", 8, false);
+                return [this.play("lpc.thrust.back", 8, false), new Phaser.Point(8, -48)];
             } else if (dy > 0) {
-                this.play("lpc.thrust.front", 8, false);
+                return [this.play("lpc.thrust.front", 8, false), new Phaser.Point(-8, 8)];
             } else if (dx < 0) {
-                this.play("lpc.thrust.left", 8, false);
+                return [this.play("lpc.thrust.left", 8, false), new Phaser.Point(-24, -16)];
             } else if (dx > 0) {
-                this.play("lpc.thrust.right", 8, false);
+                return [this.play("lpc.thrust.right", 8, false), new Phaser.Point(24, -16)];
             } else {
-                this.play("lpc.thrust.back", 8, false);
+                return [this.play("lpc.thrust.back", 8, false), new Phaser.Point(8, -48)];
             }
         }
-        return true;
     }
 
     private action_FollowPath(): boolean {

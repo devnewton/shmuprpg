@@ -92,13 +92,16 @@ export class Level extends AbstractState {
             this.game.debug.body(<Phaser.Sprite>s);
         }
         this.game.debug.body(this.hero.sprite);*/
-        for(let c of this.grobelinHorde.children) {
-               const s = <Grobelin>c;
-               this.game.debug.body(s);
-               this.game.debug.geom(new Phaser.Point(s.body.center.x, s.body.center.y), '#ff0000');
-               for (let p of s.path) {
-                   this.game.debug.geom(new Phaser.Point(p.x, p.y), '#0000FF');
-               }
-           }
+        for (let c of this.grobelinHorde.children) {
+            const s = <Grobelin>c;
+            this.game.debug.body(s);
+            const attackPoint = s.getAttackPoint();
+            if (attackPoint) {
+                this.game.debug.geom(attackPoint, '#ff0000');
+            }
+            for (let p of s.path) {
+                this.game.debug.geom(new Phaser.Point(p.x, p.y), '#0000FF');
+            }
+        }
     }
 }

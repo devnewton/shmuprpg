@@ -12,7 +12,7 @@ export class GrobelinHorde extends Phaser.Group {
     private nextAppearsTime = 0;
     private pathfinder: Pathfinder;
 
-    constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 4) {
+    constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 1) {
         super(target.game);
         this.pathfinder = pathFinder;
         this.target = target;
