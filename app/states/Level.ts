@@ -67,7 +67,7 @@ export class Level extends AbstractState {
 
         this.hero = new Hero(this.game);
         this.game.add.existing(this.hero);
-        this.birdFlock = new BirdFlock(this.hero, 0);
+        this.birdFlock = new BirdFlock(this.hero);
         this.game.add.existing(this.birdFlock);
         this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder);
         this.game.add.existing(this.grobelinHorde);
@@ -77,35 +77,38 @@ export class Level extends AbstractState {
         this.pathfinder.update();
         this.hero.update();
         this.game.physics.arcade.collide(this.hero, this.collisionSprites);
+        this.resolveWeaponsEffects();
+    }
+
+    resolveWeaponsEffects() {
         this.game.physics.arcade.overlap(this.birdFlock, this.hero.weapon, (bird: Phaser.Sprite, bullet: Phaser.Sprite) => {
             bird.kill();
-            bullet.kill();
-        });
-        this.game.physics.arcade.overlap(this.grobelinHorde, this.hero.weapon, (grobelin: Phaser.Sprite, bullet: Phaser.Sprite) => {
-            grobelin.damage(1);
             bullet.kill();
         });
         this.game.physics.arcade.overlap(this.hero, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
             bird.kill();
             this.hero.damage(1);
         });
+        for (let b of this.hero.weapon.children) {
+            const bullet = <Phaser.Sprite>b;
+            if (bullet.exists) {
+                const bulletRect = new Phaser.Rectangle(bullet.x, bullet.y, bullet.width, bullet.height);
+                grobelins_loop: for (let c of this.grobelinHorde.children) {
+                    const grobelin = <Grobelin>c;
+                    if (grobelin.exists) {
+                        for (let v of grobelin.getVulnerableRectangles()) {
+                            if (bulletRect.intersects(v, 1)) {
+                                bullet.kill();
+                                grobelin.damage(1);
+                                break grobelins_loop;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     render() {
-        /*for (let s of this.collisionSprites.children) {
-            this.game.debug.body(<Phaser.Sprite>s);
-        }
-        this.game.debug.body(this.hero.sprite);*/
-        for (let c of this.grobelinHorde.children) {
-            const s = <Grobelin>c;
-            this.game.debug.body(s);
-            const attackPoint = s.getAttackPoint();
-            if (attackPoint) {
-                this.game.debug.geom(attackPoint, '#ff0000');
-            }
-            for (let p of s.path) {
-                this.game.debug.geom(new Phaser.Point(p.x, p.y), '#0000FF');
-            }
-        }
     }
 }

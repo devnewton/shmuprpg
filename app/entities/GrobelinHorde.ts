@@ -7,12 +7,12 @@ import { Pathfinder } from "../utils/Pathfinder.ts";
 
 export class GrobelinHorde extends Phaser.Group {
 
-    appearsRate = 1000;
+    appearsRate = 10000;
     target: Phaser.Sprite;
     private nextAppearsTime = 0;
     private pathfinder: Pathfinder;
 
-    constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 1) {
+    constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 4) {
         super(target.game);
         this.pathfinder = pathFinder;
         this.target = target;

@@ -1,8 +1,9 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import {Level} from "../states/Level.ts";
-import { Pathfinder } from "../utils/Pathfinder.ts";
+import {Pathfinder} from "../utils/Pathfinder.ts";
+import {Vulnerable} from "./features/Vulnerable.ts";
 
-export class Grobelin extends Phaser.Sprite {
+export class Grobelin extends Phaser.Sprite implements Vulnerable {
 
     grobelinDeath: Phaser.Sprite;
     enemy: Phaser.Sprite;
@@ -20,13 +21,15 @@ export class Grobelin extends Phaser.Sprite {
         this.pathfinder = pathfinder;
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.anchor.setTo(0.5, 0.5);
-        this.body.setSize(16, 16, 24, 48);
-        this.body.collideWorldBounds = true;
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
         this.grobelinDeath = this.game.add.sprite(this.x, this.y, 'grobelin');
         this.grobelinDeath.anchor.setTo(0.5, 0.5);
         this.grobelinDeath.exists = false;
+    }
+
+    getVulnerableRectangles(): Array<Phaser.Rectangle> {
+        return [new Phaser.Rectangle(this.x, this.y, this.width, this.height)];
     }
 
     appears(fromX: number, fromY: number, target: Phaser.Sprite) {
@@ -35,8 +38,12 @@ export class Grobelin extends Phaser.Sprite {
         const beforeGrobelinAnimation = beforeGrobelin.animations.add('appears');
         beforeGrobelinAnimation.onComplete.add(() => {
             beforeGrobelin.destroy();
-            this.reset(fromX, fromY);
-            this.health = 1;
+            this.reset(fromX, fromY, 50);
+            this.body.setSize(16, 16, 24, 48);
+            this.body.collideWorldBounds = true;
+            this.path = [];
+            this.currentPathPointTarget = null;
+            this.thinking = false;
             this.enemy = target;
         });
         beforeGrobelinAnimation.play(4, false);
@@ -44,6 +51,8 @@ export class Grobelin extends Phaser.Sprite {
 
     kill(): Phaser.Sprite {
         super.kill();
+        this.damageTween.stop(true);
+        this.tint = 0xFFFFFF;
         this.grobelinDeath.reset(this.x, this.y);
         this.grobelinDeath.animations.play("lpc.hurt", 6, false).killOnComplete = true;
         return this;
