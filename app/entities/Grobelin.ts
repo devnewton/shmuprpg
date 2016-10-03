@@ -4,7 +4,7 @@ import { Pathfinder } from "../utils/Pathfinder.ts";
 
 export class Grobelin extends Phaser.Sprite {
 
-    birdExplosion: Phaser.Sprite;
+    grobelinDeath: Phaser.Sprite;
     enemy: Phaser.Sprite;
     path = new Array<Phaser.Point>();
     currentPathPointTarget: Phaser.Point;
@@ -16,20 +16,17 @@ export class Grobelin extends Phaser.Sprite {
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
+        this.exists = false;
         this.pathfinder = pathfinder;
-        this.animations.add('fly');
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.anchor.setTo(0.5, 0.5);
         this.body.setSize(16, 16, 24, 48);
         this.body.collideWorldBounds = true;
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
-        this.exists = false;
-        this.birdExplosion = this.game.add.sprite(this.x, this.y, 'bird-explosion');
-        this.birdExplosion.anchor.setTo(0.5, 0.5);
-        this.birdExplosion.exists = false;
-        const explodeAnimation = this.birdExplosion.animations.add('explode');
-        explodeAnimation.killOnComplete = true;
+        this.grobelinDeath = this.game.add.sprite(this.x, this.y, 'grobelin');
+        this.grobelinDeath.anchor.setTo(0.5, 0.5);
+        this.grobelinDeath.exists = false;
     }
 
     appears(fromX: number, fromY: number, target: Phaser.Sprite) {
@@ -39,7 +36,7 @@ export class Grobelin extends Phaser.Sprite {
         beforeGrobelinAnimation.onComplete.add(() => {
             beforeGrobelin.destroy();
             this.reset(fromX, fromY);
-            this.health = 100;
+            this.health = 1;
             this.enemy = target;
         });
         beforeGrobelinAnimation.play(4, false);
@@ -47,8 +44,8 @@ export class Grobelin extends Phaser.Sprite {
 
     kill(): Phaser.Sprite {
         super.kill();
-        this.birdExplosion.reset(this.x, this.y);
-        this.birdExplosion.play('explode', 8, false);
+        this.grobelinDeath.reset(this.x, this.y);
+        this.grobelinDeath.animations.play("lpc.hurt", 6, false).killOnComplete = true;
         return this;
     }
 
@@ -185,8 +182,6 @@ export class Grobelin extends Phaser.Sprite {
 
     private action_FollowPath_MoveToXY(x: number, y: number, speed: number = 60) {
         var angle = Math.atan2(y - this.body.center.y, x - this.body.center.x);
-        /*var distance = Phaser.Math.distance(this.body.center.x, this.body.center.y, x, y);
-        speed = Math.max(distance, speed);*/
         this.body.velocity.x = Math.cos(angle) * speed;
         this.body.velocity.y = Math.sin(angle) * speed;
     }

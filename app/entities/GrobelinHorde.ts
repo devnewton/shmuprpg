@@ -33,6 +33,7 @@ export class GrobelinHorde extends Phaser.Group {
     private createGrobelin(): Grobelin {
         const grobelin = new Grobelin(this.game, this.pathfinder);
         const game = <ShmuprpgGame>this.game;
+        game.addSpriteAnimation(grobelin.grobelinDeath, 'lpc.hurt', 6);
         game.addSpriteAnimation(grobelin, 'lpc.hurt', 6);
         game.addSpriteAnimation(grobelin, 'lpc.walk.back', 9);
         game.addSpriteAnimation(grobelin, 'lpc.walk.front', 9);
