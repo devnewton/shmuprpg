@@ -81,6 +81,10 @@ export class Level extends AbstractState {
             bird.kill();
             bullet.kill();
         });
+        this.game.physics.arcade.overlap(this.grobelinHorde, this.hero.weapon, (grobelin: Phaser.Sprite, bullet: Phaser.Sprite) => {
+            grobelin.damage(1);
+            bullet.kill();
+        });
         this.game.physics.arcade.overlap(this.hero, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
             bird.kill();
             this.hero.damage(1);

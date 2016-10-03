@@ -12,6 +12,7 @@ export class Grobelin extends Phaser.Sprite {
     private pathfinder: Pathfinder;
     private attackAnimation: Phaser.Animation;
     private attackDangerousOffset: Phaser.Point;
+    private damageTween: Phaser.Tween;
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
@@ -38,6 +39,7 @@ export class Grobelin extends Phaser.Sprite {
         beforeGrobelinAnimation.onComplete.add(() => {
             beforeGrobelin.destroy();
             this.reset(fromX, fromY);
+            this.health = 100;
             this.enemy = target;
         });
         beforeGrobelinAnimation.play(4, false);
@@ -55,6 +57,15 @@ export class Grobelin extends Phaser.Sprite {
         if (this.exists) {
             this.executeBehaviorTree();
         }
+    }
+
+    damage(amount: number): Phaser.Sprite {
+        if (!this.damageTween) {
+            this.damageTween = this.game.add.tween(this).from({ tint: 0xFF0000 }).to({ tint: 0xFFFFFF }, 500, Phaser.Easing.Linear.None, true, 0, 4, false);
+            this.damageTween.onComplete.add((): void => this.damageTween = null);
+        }
+        super.damage(amount);
+        return this;
     }
 
     private executeBehaviorTree() {
