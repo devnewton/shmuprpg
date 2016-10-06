@@ -1,9 +1,21 @@
-export class Tree {
-    root: Node;
+export class Tree<ME> {
+    root: Node<ME>;
 
-    tick(me: any, blackboard: BlackBoard) {
+    tick(me: ME, blackboard: BlackBoard) {
         const t = new Tick(me, blackboard);
         this.root.tick(t);
+    }
+
+    sequence(...children: Node<ME>[]): Sequence<ME> {
+        return new Sequence<ME>(...children);
+    }
+
+    selector(...children: Node<ME>[]): Sequence<ME> {
+        return new Selector<ME>(...children);
+    }
+
+    parallel(...children: Node<ME>[]): Sequence<ME> {
+        return new Parallel<ME>(...children);
     }
 }
 
@@ -20,11 +32,11 @@ export class BlackBoard {
     }
 }
 
-export class Tick {
-    me: any;
+export class Tick<ME> {
+    me: ME;
     blackboard: BlackBoard;
 
-    constructor(me: any, b: BlackBoard) {
+    constructor(me: ME, b: BlackBoard) {
         this.blackboard = b;
         this.me = me;
     }
@@ -34,31 +46,31 @@ export enum NodeState {
     SUCCESS, FAILURE, RUNNING
 }
 
-export abstract class Node {
+export abstract class Node<ME> {
 
-    abstract tick(t: Tick): NodeState;
+    abstract tick(t: Tick<ME>): NodeState;
 }
 
 
-export abstract class Branch extends Node {
-    children: Node[];
-    constructor(...children: Node[]) {
+export abstract class Branch<ME> extends Node<ME> {
+    children: Node<ME>[];
+    constructor(...children: Node<ME>[]) {
         super();
         this.children = children;
     }
 
 }
 
-export abstract class Leaf extends Node {
+export abstract class Leaf<ME> extends Node<ME> {
 
 }
 
-export class Selector extends Branch {
+export class Selector<ME> extends Branch<ME> {
 
-    constructor(...children: Node[]) {
+    constructor(...children: Node<ME>[]) {
         super(...children);
     }
-    tick(t: Tick): NodeState {
+    tick(t: Tick<ME>): NodeState {
         for (let c of this.children) {
             switch (c.tick(t)) {
                 case NodeState.SUCCESS:
@@ -71,12 +83,12 @@ export class Selector extends Branch {
     }
 }
 
-export class Sequence extends Branch {
+export class Sequence<ME> extends Branch<ME> {
 
-    constructor(...children: Node[]) {
+    constructor(...children: Node<ME>[]) {
         super(...children);
     }
-    tick(t: Tick): NodeState {
+    tick(t: Tick<ME>): NodeState {
         for (let c of this.children) {
             switch (c.tick(t)) {
                 case NodeState.FAILURE:
@@ -89,15 +101,15 @@ export class Sequence extends Branch {
     }
 }
 
-export class Parallel extends Branch {
+export class Parallel<ME> extends Branch<ME> {
     successThreshold: number;
     failureThreshold: number;
 
-    constructor(...children: Node[]) {
+    constructor(...children: Node<ME>[]) {
         super(...children);
     }
 
-    tick(t: Tick): NodeState {
+    tick(t: Tick<ME>): NodeState {
         let failures = 0, successes = 0;
         for (let c of this.children) {
             switch (c.tick(t)) {
@@ -117,24 +129,24 @@ export class Parallel extends Branch {
     }
 }
 
-export abstract class Decorator extends Node {
-    child: Node;
+export abstract class Decorator<ME> extends Node<ME> {
+    child: Node<ME>;
 
-    constructor(child: Node) {
+    constructor(child: Node<ME>) {
         super();
         this.child = child;
     }
 }
 
-export abstract class Action extends Leaf {
+export abstract class Action<ME> extends Leaf<ME> {
 
 }
 
-export abstract class Condition extends Leaf {
+export abstract class Condition<ME> extends Leaf<ME> {
 
-    abstract check(t: Tick): boolean;
+    abstract check(t: Tick<ME>): boolean;
 
-    tick(t: Tick): NodeState {
+    tick(t: Tick<ME>): NodeState {
         if (this.check(t)) {
             return NodeState.SUCCESS;
         } else {

@@ -129,7 +129,7 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
     }
 }
 
-class GrobelinB3 extends b3.Tree {
+class GrobelinB3 extends b3.Tree<Grobelin> {
 
     private static singleton: GrobelinB3;
     static get() {
@@ -138,16 +138,16 @@ class GrobelinB3 extends b3.Tree {
 
     constructor() {
         super();
-        this.root = new b3.Selector(
-            new b3.Sequence(new ConditionIsNearEnemy(), new ActionAttackEnemy()),
+        this.root = this.selector(
+            this.sequence(new ConditionIsNearEnemy(), new ActionAttackEnemy()),
             new ActionFollowPath(),
             new ActionSearchAPathToEnemy());
     }
 }
 
-class ActionFollowPath extends b3.Action {
-    tick(t: b3.Tick): b3.NodeState {
-        let me = (<Grobelin>t.me);
+class ActionFollowPath extends b3.Action<Grobelin> {
+    tick(t: b3.Tick<Grobelin>): b3.NodeState {
+        let me = t.me;
         let currentPathPointTarget = t.blackboard.get<Phaser.Point>('currentPathPointTarget');
         if (currentPathPointTarget) {
             this.moveToXY(me, currentPathPointTarget.x, currentPathPointTarget.y, 300);
@@ -202,11 +202,11 @@ class ActionFollowPath extends b3.Action {
     }
 }
 
-class ActionSearchAPathToEnemy extends b3.Action {
+class ActionSearchAPathToEnemy extends b3.Action<Grobelin> {
 
-    tick(t: b3.Tick): b3.NodeState {
+    tick(t: b3.Tick<Grobelin>): b3.NodeState {
         let thinking = t.blackboard.get<boolean>('thinking') || false;
-        let me = (<Grobelin>t.me);
+        let me = t.me;
         if (!thinking) {
             t.blackboard.set('thinking', true);
             me.pathfinder.findPath(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y, (path: Phaser.Point[]) => {
@@ -219,17 +219,16 @@ class ActionSearchAPathToEnemy extends b3.Action {
     }
 }
 
-class ConditionIsNearEnemy extends b3.Condition {
-    check(t: b3.Tick): boolean {
-        let me = (<Grobelin>t.me);
+class ConditionIsNearEnemy extends b3.Condition<Grobelin> {
+    check(t: b3.Tick<Grobelin>): boolean {
+        let me = t.me;
         return me.enemy && Phaser.Math.distance(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y) < me.body.width * 2;
     }
 }
 
-class ActionAttackEnemy extends b3.Action {
-    tick(t: b3.Tick): b3.NodeState {
-        let me = <Grobelin>t.me;
-        if (me.action_AttackEnemy()) {
+class ActionAttackEnemy extends b3.Action<Grobelin> {
+    tick(t: b3.Tick<Grobelin>): b3.NodeState {
+        if (t.me.action_AttackEnemy()) {
             return b3.NodeState.SUCCESS;
         } else {
             return b3.NodeState.RUNNING;
