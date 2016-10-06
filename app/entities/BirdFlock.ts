@@ -7,7 +7,7 @@ export class BirdFlock extends Phaser.Group {
     target: Phaser.Sprite;
     private nextFlyTime = 0;
 
-    constructor(target: Phaser.Sprite, maxBirds: number = 8) {
+    constructor(target: Phaser.Sprite, maxBirds: number = 0) {
         super(target.game);
         this.target = target;
         for (let i = 0; i < maxBirds; ++i) {

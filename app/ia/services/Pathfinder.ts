@@ -1,5 +1,5 @@
-/// <reference path="../../typings/easystarjs.d.ts" />
-/// <reference path="../../typings/brunch-require.d.ts" />
+/// <reference path="../../../typings/easystarjs.d.ts" />
+/// <reference path="../../../typings/brunch-require.d.ts" />
 import EasyStar = require('easystarjs');
 
 export class Pathfinder {

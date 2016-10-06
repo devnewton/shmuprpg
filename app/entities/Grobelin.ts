@@ -1,19 +1,18 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import {Level} from "../states/Level.ts";
-import {Pathfinder} from "../utils/Pathfinder.ts";
+import {Pathfinder} from "../ia/services/Pathfinder.ts";
+import * as b3 from "../ia/decisions/b3.ts";
 import {Vulnerable} from "./features/Vulnerable.ts";
 
 export class Grobelin extends Phaser.Sprite implements Vulnerable {
 
     grobelinDeath: Phaser.Sprite;
     enemy: Phaser.Sprite;
-    path = new Array<Phaser.Point>();
-    currentPathPointTarget: Phaser.Point;
-    thinking = false;
-    private pathfinder: Pathfinder;
+    pathfinder: Pathfinder;
     private attackAnimation: Phaser.Animation;
     private attackDangerousOffset: Phaser.Point;
     private damageTween: Phaser.Tween;
+    private blackboard = new b3.BlackBoard();
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
@@ -41,9 +40,7 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
             this.reset(fromX, fromY, 50);
             this.body.setSize(16, 16, 24, 48);
             this.body.collideWorldBounds = true;
-            this.path = [];
-            this.currentPathPointTarget = null;
-            this.thinking = false;
+            this.blackboard.reset();
             this.enemy = target;
         });
         beforeGrobelinAnimation.play(4, false);
@@ -75,22 +72,10 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
     }
 
     private executeBehaviorTree() {
-        this.priority_Root();
+        GrobelinB3.get().tick(this, this.blackboard);
     }
 
-    private priority_Root() {
-        this.sequence_Attack() || this.action_FollowPath() || this.action_SearchAPathToEnemy();
-    }
-
-    private sequence_Attack() {
-        return this.condition_IsNearEnemy() && this.action_AttackEnemy();
-    }
-
-    private condition_IsNearEnemy(): boolean {
-        return this.enemy && Phaser.Math.distance(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y) < this.body.width * 2;
-    }
-
-    private action_AttackEnemy(): boolean {
+    action_AttackEnemy(): boolean {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         if (!this.attackAnimation) {
@@ -142,67 +127,116 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
             }
         }
     }
+}
 
-    private action_FollowPath(): boolean {
-        if (this.currentPathPointTarget) {
-            this.action_FollowPath_MoveToXY(this.currentPathPointTarget.x, this.currentPathPointTarget.y, 300);
-            if (Phaser.Math.distance(this.body.center.x, this.body.center.y, this.currentPathPointTarget.x, this.currentPathPointTarget.y) < this.body.halfWidth) {
-                this.currentPathPointTarget = null;
+class GrobelinB3 extends b3.Tree {
+
+    private static singleton: GrobelinB3;
+    static get() {
+        return this.singleton || (this.singleton = new GrobelinB3());
+    }
+
+    constructor() {
+        super();
+        const selectorRoot = new b3.Selector();
+        this.root = selectorRoot;
+        const sequenceAttack = new b3.Sequence();
+        sequenceAttack.children.push(new ConditionIsNearEnemy());
+        sequenceAttack.children.push(new ActionAttackEnemy());
+        selectorRoot.children.push(sequenceAttack);
+        selectorRoot.children.push(new ActionFollowPath());
+        selectorRoot.children.push(new ActionSearchAPathToEnemy());
+    }
+}
+
+class ActionFollowPath extends b3.Action {
+    tick(t: b3.Tick): b3.NodeState {
+        let me = (<Grobelin>t.me);
+        let currentPathPointTarget = t.blackboard.get<Phaser.Point>('currentPathPointTarget');
+        if (currentPathPointTarget) {
+            this.moveToXY(me, currentPathPointTarget.x, currentPathPointTarget.y, 300);
+            if (Phaser.Math.distance(me.body.center.x, me.body.center.y, currentPathPointTarget.x, currentPathPointTarget.y) < me.body.halfWidth) {
+                 t.blackboard.set('currentPathPointTarget', null);
             }
         } else {
-            this.currentPathPointTarget = this.path.shift();
-            if (this.path.length == 0) {
-                this.body.velocity.x = 0;
-                this.body.velocity.y = 0;
-                return false;
+            let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
+            t.blackboard.set('currentPathPointTarget', path.shift());
+            if (path.length == 0) {
+                me.body.velocity.x = 0;
+                me.body.velocity.y = 0;
+                return b3.NodeState.FAILURE;
             }
         }
-        this.action_FollowPath_Animate();
-        return true;
+        this.animate(me);
+        return b3.NodeState.RUNNING;
     }
 
-    private action_FollowPath_Animate() {
-        if (Math.abs(this.body.velocity.x) > Math.abs(this.body.velocity.y)) {
-            if (this.body.velocity.x < 0) {
-                this.play("lpc.walk.left", 8, false);
-            } else if (this.body.velocity.x > 0) {
-                this.play("lpc.walk.right", 8, false);
-            } else if (this.body.velocity.y < 0) {
-                this.play("lpc.walk.back", 8, false);
-            } else if (this.body.velocity.y > 0) {
-                this.play("lpc.walk.front", 8, false);
+    animate(me: Grobelin) {
+        if (Math.abs(me.body.velocity.x) > Math.abs(me.body.velocity.y)) {
+            if (me.body.velocity.x < 0) {
+                me.play("lpc.walk.left", 8, false);
+            } else if (me.body.velocity.x > 0) {
+                me.play("lpc.walk.right", 8, false);
+            } else if (me.body.velocity.y < 0) {
+                me.play("lpc.walk.back", 8, false);
+            } else if (me.body.velocity.y > 0) {
+                me.play("lpc.walk.front", 8, false);
             } else {
-                this.play("lpc.hurt", 0, false);
+                me.play("lpc.hurt", 0, false);
             }
         } else {
-            if (this.body.velocity.y < 0) {
-                this.play("lpc.walk.back", 8, false);
-            } else if (this.body.velocity.y > 0) {
-                this.play("lpc.walk.front", 8, false);
-            } else if (this.body.velocity.x < 0) {
-                this.play("lpc.walk.left", 8, false);
-            } else if (this.body.velocity.x > 0) {
-                this.play("lpc.walk.right", 8, false);
+            if (me.body.velocity.y < 0) {
+                me.play("lpc.walk.back", 8, false);
+            } else if (me.body.velocity.y > 0) {
+                me.play("lpc.walk.front", 8, false);
+            } else if (me.body.velocity.x < 0) {
+                me.play("lpc.walk.left", 8, false);
+            } else if (me.body.velocity.x > 0) {
+                me.play("lpc.walk.right", 8, false);
             } else {
-                this.play("lpc.hurt", 0, false);
+                me.play("lpc.hurt", 0, false);
             }
         }
     }
 
-    private action_FollowPath_MoveToXY(x: number, y: number, speed: number = 60) {
-        var angle = Math.atan2(y - this.body.center.y, x - this.body.center.x);
-        this.body.velocity.x = Math.cos(angle) * speed;
-        this.body.velocity.y = Math.sin(angle) * speed;
+    moveToXY(me: Grobelin, x: number, y: number, speed: number = 60) {
+        var angle = Math.atan2(y - me.body.center.y, x - me.body.center.x);
+        me.body.velocity.x = Math.cos(angle) * speed;
+        me.body.velocity.y = Math.sin(angle) * speed;
     }
+}
 
-    private action_SearchAPathToEnemy(): boolean {
-        if (!this.thinking) {
-            this.thinking = true;
-            this.pathfinder.findPath(this.body.center.x, this.body.center.y, this.enemy.body.center.x, this.enemy.body.center.y, (path: Phaser.Point[]) => {
-                this.path = path || new Array<Phaser.Point>();
-                this.thinking = false;
+class ActionSearchAPathToEnemy extends b3.Action {
+  
+    tick(t: b3.Tick): b3.NodeState {
+        let thinking = t.blackboard.get<boolean>('thinking') || false;
+        let me = (<Grobelin>t.me);
+        if (!thinking) {
+           t.blackboard.set('thinking', true);
+            me.pathfinder.findPath(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y, (path: Phaser.Point[]) => {
+                t.blackboard.set('path', path || []);
+                t.blackboard.set('thinking', false);
             });
         }
-        return this.path.length == 0;
+        let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
+        return path.length>0 ? b3.NodeState.SUCCESS : b3.NodeState.RUNNING;
+    }
+}
+
+class ConditionIsNearEnemy extends b3.Condition {
+    check(t: b3.Tick): boolean {
+        let me = (<Grobelin>t.me);
+        return me.enemy && Phaser.Math.distance(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y) < me.body.width * 2;
+    }
+}
+
+class ActionAttackEnemy extends b3.Action {
+    tick(t: b3.Tick): b3.NodeState {
+        let me = <Grobelin>t.me;
+        if (me.action_AttackEnemy()) {
+            return b3.NodeState.SUCCESS;
+        } else {
+            return b3.NodeState.RUNNING;
+        }
     }
 }

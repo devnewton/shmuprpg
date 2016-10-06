@@ -5,7 +5,7 @@ import {BirdFlock} from "../entities/BirdFlock.ts";
 import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
 import {Grobelin} from "../entities/Grobelin.ts";
 
-import {Pathfinder} from "../utils/Pathfinder.ts"
+import {Pathfinder} from "../ia/services/Pathfinder.ts"
 
 export class Level extends AbstractState {
 

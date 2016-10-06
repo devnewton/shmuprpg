@@ -2,8 +2,7 @@
 import {Grobelin} from "./Grobelin.ts";
 import { ShmuprpgGame } from "../ShmuprpgGame.ts";
 import { Level } from "../states/Level.ts";
-import { Pathfinder } from "../utils/Pathfinder.ts";
-
+import { Pathfinder } from "../ia/services/Pathfinder.ts";
 
 export class GrobelinHorde extends Phaser.Group {
 
