@@ -41,7 +41,11 @@ export abstract class Node {
 
 
 export abstract class Branch extends Node {
-    children = new Array<Node>();
+    children: Node[];
+    constructor(...children: Node[]) {
+        super();
+        this.children = children;
+    }
 
 }
 
@@ -50,6 +54,10 @@ export abstract class Leaf extends Node {
 }
 
 export class Selector extends Branch {
+
+    constructor(...children: Node[]) {
+        super(...children);
+    }
     tick(t: Tick): NodeState {
         for (let c of this.children) {
             switch (c.tick(t)) {
@@ -64,6 +72,10 @@ export class Selector extends Branch {
 }
 
 export class Sequence extends Branch {
+
+    constructor(...children: Node[]) {
+        super(...children);
+    }
     tick(t: Tick): NodeState {
         for (let c of this.children) {
             switch (c.tick(t)) {
@@ -78,8 +90,12 @@ export class Sequence extends Branch {
 }
 
 export class Parallel extends Branch {
-    failureThreshold: number;
     successThreshold: number;
+    failureThreshold: number;
+
+    constructor(...children: Node[]) {
+        super(...children);
+    }
 
     tick(t: Tick): NodeState {
         let failures = 0, successes = 0;

@@ -138,14 +138,10 @@ class GrobelinB3 extends b3.Tree {
 
     constructor() {
         super();
-        const selectorRoot = new b3.Selector();
-        this.root = selectorRoot;
-        const sequenceAttack = new b3.Sequence();
-        sequenceAttack.children.push(new ConditionIsNearEnemy());
-        sequenceAttack.children.push(new ActionAttackEnemy());
-        selectorRoot.children.push(sequenceAttack);
-        selectorRoot.children.push(new ActionFollowPath());
-        selectorRoot.children.push(new ActionSearchAPathToEnemy());
+        this.root = new b3.Selector(
+            new b3.Sequence(new ConditionIsNearEnemy(), new ActionAttackEnemy()),
+            new ActionFollowPath(),
+            new ActionSearchAPathToEnemy());
     }
 }
 
@@ -156,7 +152,7 @@ class ActionFollowPath extends b3.Action {
         if (currentPathPointTarget) {
             this.moveToXY(me, currentPathPointTarget.x, currentPathPointTarget.y, 300);
             if (Phaser.Math.distance(me.body.center.x, me.body.center.y, currentPathPointTarget.x, currentPathPointTarget.y) < me.body.halfWidth) {
-                 t.blackboard.set('currentPathPointTarget', null);
+                t.blackboard.set('currentPathPointTarget', null);
             }
         } else {
             let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
@@ -207,19 +203,19 @@ class ActionFollowPath extends b3.Action {
 }
 
 class ActionSearchAPathToEnemy extends b3.Action {
-  
+
     tick(t: b3.Tick): b3.NodeState {
         let thinking = t.blackboard.get<boolean>('thinking') || false;
         let me = (<Grobelin>t.me);
         if (!thinking) {
-           t.blackboard.set('thinking', true);
+            t.blackboard.set('thinking', true);
             me.pathfinder.findPath(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y, (path: Phaser.Point[]) => {
                 t.blackboard.set('path', path || []);
                 t.blackboard.set('thinking', false);
             });
         }
         let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
-        return path.length>0 ? b3.NodeState.SUCCESS : b3.NodeState.RUNNING;
+        return path.length > 0 ? b3.NodeState.SUCCESS : b3.NodeState.RUNNING;
     }
 }
 
