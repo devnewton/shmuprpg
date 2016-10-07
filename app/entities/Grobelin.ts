@@ -12,7 +12,7 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
     private attackAnimation: Phaser.Animation;
     private attackDangerousOffset: Phaser.Point;
     private damageTween: Phaser.Tween;
-    private blackboard = new b3.BlackBoard();
+    private blackboard: GrobelinBlackboard;
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'grobelin');
@@ -40,7 +40,7 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
             this.reset(fromX, fromY, 50);
             this.body.setSize(16, 16, 24, 48);
             this.body.collideWorldBounds = true;
-            this.blackboard.reset();
+            this.blackboard = new GrobelinBlackboard();
             this.enemy = target;
         });
         beforeGrobelinAnimation.play(4, false);
@@ -129,7 +129,12 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
     }
 }
 
-class GrobelinB3 extends b3.Tree<Grobelin> {
+class GrobelinBlackboard extends b3.Blackboard {
+    currentPathPointTarget: Phaser.Point;
+    path: Array<Phaser.Point>;
+}
+
+class GrobelinB3 extends b3.Tree<Grobelin, GrobelinBlackboard> {
 
     private static singleton: GrobelinB3;
     static get() {
@@ -145,18 +150,18 @@ class GrobelinB3 extends b3.Tree<Grobelin> {
     }
 }
 
-class ActionFollowPath extends b3.Action<Grobelin> {
-    tick(t: b3.Tick<Grobelin>): b3.NodeState {
+class ActionFollowPath extends b3.Action<Grobelin, GrobelinBlackboard> {
+    tick(t: b3.Tick<Grobelin, GrobelinBlackboard>): b3.NodeState {
         let me = t.me;
-        let currentPathPointTarget = t.blackboard.get<Phaser.Point>('currentPathPointTarget');
+        let currentPathPointTarget = t.blackboard.currentPathPointTarget;
         if (currentPathPointTarget) {
             this.moveToXY(me, currentPathPointTarget.x, currentPathPointTarget.y, 300);
             if (Phaser.Math.distance(me.body.center.x, me.body.center.y, currentPathPointTarget.x, currentPathPointTarget.y) < me.body.halfWidth) {
-                t.blackboard.set('currentPathPointTarget', null);
+                t.blackboard.currentPathPointTarget = null;
             }
         } else {
-            let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
-            t.blackboard.set('currentPathPointTarget', path.shift());
+            let path = t.blackboard.path || [];
+           t.blackboard.currentPathPointTarget =  path.shift();
             if (path.length == 0) {
                 me.body.velocity.x = 0;
                 me.body.velocity.y = 0;
@@ -202,32 +207,34 @@ class ActionFollowPath extends b3.Action<Grobelin> {
     }
 }
 
-class ActionSearchAPathToEnemy extends b3.Action<Grobelin> {
+class ActionSearchAPathToEnemy extends b3.Action<Grobelin, GrobelinBlackboard> {
+    
+    thinking = new b3.BlackboardKey<boolean>();
 
-    tick(t: b3.Tick<Grobelin>): b3.NodeState {
-        let thinking = t.blackboard.get<boolean>('thinking') || false;
+    tick(t: b3.Tick<Grobelin, GrobelinBlackboard>): b3.NodeState {
+        let thinking = t.blackboard.get(this.thinking) || false;
         let me = t.me;
         if (!thinking) {
-            t.blackboard.set('thinking', true);
+            t.blackboard.set(this.thinking, true);
             me.pathfinder.findPath(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y, (path: Phaser.Point[]) => {
-                t.blackboard.set('path', path || []);
-                t.blackboard.set('thinking', false);
+                t.blackboard.path = path || [];
+                t.blackboard.set(this.thinking, false);
             });
         }
-        let path = t.blackboard.get<Array<Phaser.Point>>('path') || [];
+        let path = t.blackboard.path || [];
         return path.length > 0 ? b3.NodeState.SUCCESS : b3.NodeState.RUNNING;
     }
 }
 
-class ConditionIsNearEnemy extends b3.Condition<Grobelin> {
-    check(t: b3.Tick<Grobelin>): boolean {
+class ConditionIsNearEnemy extends b3.Condition<Grobelin, GrobelinBlackboard> {
+    check(t: b3.Tick<Grobelin, GrobelinBlackboard>): boolean {
         let me = t.me;
         return me.enemy && Phaser.Math.distance(me.body.center.x, me.body.center.y, me.enemy.body.center.x, me.enemy.body.center.y) < me.body.width * 2;
     }
 }
 
-class ActionAttackEnemy extends b3.Action<Grobelin> {
-    tick(t: b3.Tick<Grobelin>): b3.NodeState {
+class ActionAttackEnemy extends b3.Action<Grobelin, GrobelinBlackboard> {
+    tick(t: b3.Tick<Grobelin, GrobelinBlackboard>): b3.NodeState {
         if (t.me.action_AttackEnemy()) {
             return b3.NodeState.SUCCESS;
         } else {
