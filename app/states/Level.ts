@@ -3,7 +3,9 @@ import { AbstractState } from "./AbstractState.ts";
 import { Hero } from "../entities/Hero.ts";
 import {BirdFlock} from "../entities/BirdFlock.ts";
 import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
+import {SpiderHorde} from "../entities/SpiderHorde.ts";
 import {Grobelin} from "../entities/Grobelin.ts";
+import {Vulnerable} from "../entities/features/Vulnerable.ts";
 
 import {Pathfinder} from "../ia/services/Pathfinder.ts"
 
@@ -13,6 +15,7 @@ export class Level extends AbstractState {
     collisionSprites: Phaser.Group;
     birdFlock: BirdFlock;
     grobelinHorde: GrobelinHorde;
+    spiderHorde: SpiderHorde;
     pathfinder: Pathfinder;
 
     constructor() {
@@ -22,6 +25,7 @@ export class Level extends AbstractState {
     preload() {
         BirdFlock.preload(this.game);
         GrobelinHorde.preload(this.game);
+        SpiderHorde.preload(this.game);
         Hero.preload(this.game);
         this.game.load.tilemap('map', 'levels/level1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('terrains', 'sprites/lpc/terrains/terrains.png');
@@ -69,8 +73,10 @@ export class Level extends AbstractState {
         this.game.add.existing(this.hero);
         this.birdFlock = new BirdFlock(this.hero);
         this.game.add.existing(this.birdFlock);
-        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder);
+        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder, 0);
         this.game.add.existing(this.grobelinHorde);
+        this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder, 1);
+        this.game.add.existing(this.spiderHorde);
     }
 
     update() {
@@ -89,18 +95,23 @@ export class Level extends AbstractState {
             bird.kill();
             this.hero.damage(1);
         });
-        for (let b of this.hero.weapon.children) {
+        this.resolveBulletsVersusVulnerables(this.hero.weapon, this.grobelinHorde);
+        this.resolveBulletsVersusVulnerables(this.hero.weapon, this.spiderHorde);
+    }
+
+    resolveBulletsVersusVulnerables(weapon: Phaser.Group, vulnerables: Phaser.Group) {
+        for (let b of weapon.children) {
             const bullet = <Phaser.Sprite>b;
             if (bullet.exists) {
                 const bulletRect = new Phaser.Rectangle(bullet.x, bullet.y, bullet.width, bullet.height);
-                grobelins_loop: for (let c of this.grobelinHorde.children) {
-                    const grobelin = <Grobelin>c;
-                    if (grobelin.exists) {
-                        for (let v of grobelin.getVulnerableRectangles()) {
+                vulnerables_loop: for (let c of vulnerables.children) {
+                    const vulnerable = c as Vulnerable & Phaser.Sprite;
+                    if (vulnerable.exists) {
+                        for (let v of vulnerable.getVulnerableRectangles()) {
                             if (bulletRect.intersects(v, 1)) {
                                 bullet.kill();
-                                grobelin.damage(1);
-                                break grobelins_loop;
+                                vulnerable.damage(1);
+                                break vulnerables_loop;
                             }
                         }
                     }

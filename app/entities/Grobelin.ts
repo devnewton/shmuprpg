@@ -75,11 +75,11 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
         GrobelinB3.get().tick(this, this.blackboard);
     }
 
-    action_AttackEnemy(): boolean {
+    attackEnemy(): boolean {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         if (!this.attackAnimation) {
-            [this.attackAnimation, this.attackDangerousOffset] = this.action_AttackEnemy_PlayAnimation();
+            [this.attackAnimation, this.attackDangerousOffset] = this.playAttackEnemyAnimation();
         } else if (this.attackAnimation.isFinished) {
             this.attackAnimation = null;
             const enemyRectangle = new Phaser.Rectangle(this.enemy.left, this.enemy.top, this.enemy.width, this.enemy.height);
@@ -98,7 +98,7 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
         }
     }
 
-    private action_AttackEnemy_PlayAnimation(): [Phaser.Animation, Phaser.Point] {
+    private playAttackEnemyAnimation(): [Phaser.Animation, Phaser.Point] {
         const dx = this.enemy.body.center.x - this.body.center.x;
         const dy = this.enemy.body.center.y - this.body.center.y;
         if (Math.abs(dx) > Math.abs(dy)) {
@@ -235,7 +235,7 @@ class ConditionIsNearEnemy extends b3.Condition<Grobelin, GrobelinBlackboard> {
 
 class ActionAttackEnemy extends b3.Action<Grobelin, GrobelinBlackboard> {
     tick(t: b3.Tick<Grobelin, GrobelinBlackboard>): b3.NodeState {
-        if (t.me.action_AttackEnemy()) {
+        if (t.me.attackEnemy()) {
             return b3.NodeState.SUCCESS;
         } else {
             return b3.NodeState.RUNNING;

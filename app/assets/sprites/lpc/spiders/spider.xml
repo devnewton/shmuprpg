@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TextureAtlas imagePath="spider01.png">
+    <SubTexture name="spider.hurt0" x="0" y="256" width="64" height="64" />
+    <SubTexture name="spider.hurt1" x="64" y="256" width="64" height="64" />
+    <SubTexture name="spider.hurt2" x="128" y="256" width="64" height="64" />
+    <SubTexture name="spider.hurt3" x="192" y="256" width="64" height="64" />
+    <!-- back -->
+    <SubTexture name="spider.stand.back0" x="0" y="0" width="64" height="64" />
+    <SubTexture name="spider.attack.back0" x="0" y="0" width="64" height="64" />
+    <SubTexture name="spider.attack.back1" x="64" y="0" width="64" height="64"/>
+    <SubTexture name="spider.attack.back2" x="128" y="0" width="64" height="64" />
+    <SubTexture name="spider.attack.back3" x="192" y="0" width="64" height="64"/>
+    <SubTexture name="spider.walk.back0" x="256" y="0" width="64" height="64" />
+    <SubTexture name="spider.walk.back1" x="320" y="0" width="64" height="64" />
+    <SubTexture name="spider.walk.back2" x="384" y="0" width="64" height="64" />
+    <SubTexture name="spider.walk.back3" x="448" y="0" width="64" height="64" />
+    <SubTexture name="spider.walk.back4" x="512" y="0" width="64" height="64" />
+    <SubTexture name="spider.walk.back5" x="576" y="0" width="64" height="64" />
+    <!-- left -->
+    <SubTexture name="spider.stand.left0" x="0" y="64" width="64" height="64" />
+    <SubTexture name="spider.attack.left0" x="0" y="64" width="64" height="64" />
+    <SubTexture name="spider.attack.left1" x="64" y="64" width="64" height="64"/>
+    <SubTexture name="spider.attack.left2" x="128" y="64" width="64" height="64" />
+    <SubTexture name="spider.attack.left3" x="192" y="64" width="64" height="64"/>
+    <SubTexture name="spider.walk.left0" x="256" y="64" width="64" height="64" />
+    <SubTexture name="spider.walk.left1" x="320" y="64" width="64" height="64" />
+    <SubTexture name="spider.walk.left2" x="384" y="64" width="64" height="64" />
+    <SubTexture name="spider.walk.left3" x="448" y="64" width="64" height="64" />
+    <SubTexture name="spider.walk.left4" x="512" y="64" width="64" height="64" />
+    <SubTexture name="spider.walk.left5" x="576" y="64" width="64" height="64" />
+    <!-- front -->
+    <SubTexture name="spider.stand.front0" x="0" y="128" width="64" height="64" />
+    <SubTexture name="spider.attack.front0" x="0" y="128" width="64" height="64" />
+    <SubTexture name="spider.attack.front1" x="64" y="128" width="64" height="64"/>
+    <SubTexture name="spider.attack.front2" x="128" y="128" width="64" height="64" />
+    <SubTexture name="spider.attack.front3" x="192" y="128" width="64" height="64"/>
+    <SubTexture name="spider.walk.front0" x="256" y="128" width="64" height="64" />
+    <SubTexture name="spider.walk.front1" x="320" y="128" width="64" height="64" />
+    <SubTexture name="spider.walk.front2" x="384" y="128" width="64" height="64" />
+    <SubTexture name="spider.walk.front3" x="448" y="128" width="64" height="64" />
+    <SubTexture name="spider.walk.front4" x="512" y="128" width="64" height="64" />
+    <SubTexture name="spider.walk.front5" x="576" y="128" width="64" height="64" />
+    <!-- right -->
+    <SubTexture name="spider.stand.right0" x="0" y="192" width="64" height="64" />
+    <SubTexture name="spider.attack.right0" x="0" y="192" width="64" height="64" />
+    <SubTexture name="spider.attack.right1" x="64" y="192" width="64" height="64"/>
+    <SubTexture name="spider.attack.right2" x="128" y="192" width="64" height="64" />
+    <SubTexture name="spider.attack.right3" x="192" y="192" width="64" height="64"/>
+    <SubTexture name="spider.walk.right0" x="256" y="192" width="64" height="64" />
+    <SubTexture name="spider.walk.right1" x="320" y="192" width="64" height="64" />
+    <SubTexture name="spider.walk.right2" x="384" y="192" width="64" height="64" />
+    <SubTexture name="spider.walk.right3" x="448" y="192" width="64" height="64" />
+    <SubTexture name="spider.walk.right4" x="512" y="192" width="64" height="64" />
+    <SubTexture name="spider.walk.right5" x="576" y="192" width="64" height="64" />
+</TextureAtlas>

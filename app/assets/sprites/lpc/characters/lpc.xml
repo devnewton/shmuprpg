@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <TextureAtlas>
     <SubTexture name="lpc.spellcast.back0" x="0" y="0" width="64" height="64"/>
     <SubTexture name="lpc.spellcast.back1" x="64" y="0" width="64" height="64"/>
