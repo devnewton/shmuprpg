@@ -15,13 +15,12 @@ export class MachineGun extends Phaser.Group {
     }
 
     createBullet(): Bullet {
-        const bullet = new Bullet(this.game);
-        return bullet;
+        return new Bullet(this.game);
     }
 
     fire(fromX: number, fromY: number, angle: number) {
         if (this.game.time.time >= this.nextFireTime) {
-            const bullet = this.getFirstExists(false);
+            const bullet = <Bullet>this.getFirstExists(false);
             if (bullet) {
                 bullet.fire(fromX, fromY, angle, this.bulletSpeed, 0, 0);
                 this.nextFireTime = this.game.time.time + this.fireRate;

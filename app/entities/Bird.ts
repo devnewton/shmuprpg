@@ -25,7 +25,7 @@ export class Bird extends Phaser.Sprite {
         const beforeBirdAnimation = beforeBird.animations.add('appears');
         beforeBirdAnimation.onComplete.add(() => {
             beforeBird.destroy();
-            this.reset(fromX, fromY);
+            this.reset(fromX, fromY, 1);
             this.play('fly', 8, true);
             this.game.physics.arcade.velocityFromRotation(angle, 300, this.body.velocity);
             this.scale.set(this.body.velocity.x < 0 ? -1 : 1, 1);

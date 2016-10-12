@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TextureAtlas imagePath="effects01.png">
+	<!-- bullet.red -->
+	<SubTexture name="bullet.red0" x="0" y="0" width="16" height="16" />
+	<SubTexture name="bullet.red1" x="16" y="0" width="16" height="16" />
+	<SubTexture name="bullet.red2" x="32" y="0" width="16" height="16" />
+	<SubTexture name="bullet.red3" x="48" y="0" width="16" height="16" />
+	<SubTexture name="bullet.red4" x="64" y="0" width="16" height="16" />
+	<!-- bullet.yellow -->
+	<SubTexture name="bullet.yellow0" x="0" y="16" width="16" height="16" />
+	<SubTexture name="bullet.yellow1" x="16" y="16" width="16" height="16" />
+	<SubTexture name="bullet.yellow2" x="32" y="16" width="16" height="16" />
+	<SubTexture name="bullet.yellow3" x="48" y="16" width="16" height="16" />
+	<SubTexture name="bullet.yellow4" x="64" y="16" width="16" height="16" />
+	<!-- bullet.blue -->
+	<SubTexture name="bullet.blue0" x="0" y="32" width="16" height="16" />
+	<SubTexture name="bullet.blue1" x="16" y="32" width="16" height="16" />
+	<SubTexture name="bullet.blue2" x="32" y="32" width="16" height="16" />
+	<SubTexture name="bullet.blue3" x="48" y="32" width="16" height="16" />
+	<SubTexture name="bullet.blue4" x="64" y="32" width="16" height="16" />
+</TextureAtlas>

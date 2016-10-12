@@ -14,7 +14,7 @@ export class Spider extends Phaser.Sprite implements Vulnerable {
     private attackDangerousOffset: Phaser.Point;
     private damageTween: Phaser.Tween;
     private blackboard: SpiderBlackboard;
-    private machineGun: MachineGun;
+    machineGun: MachineGun;
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'spider');

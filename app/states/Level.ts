@@ -4,10 +4,12 @@ import { Hero } from "../entities/Hero.ts";
 import {BirdFlock} from "../entities/BirdFlock.ts";
 import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
 import {SpiderHorde} from "../entities/SpiderHorde.ts";
-import {Grobelin} from "../entities/Grobelin.ts";
+import {Spider} from "../entities/Spider.ts";
+
 import {Vulnerable} from "../entities/features/Vulnerable.ts";
 
-import {Pathfinder} from "../ia/services/Pathfinder.ts"
+import {Pathfinder} from "../ia/services/Pathfinder.ts";
+import {DamageResolver} from "../utils/DamageResolver.ts";
 
 export class Level extends AbstractState {
 
@@ -17,6 +19,7 @@ export class Level extends AbstractState {
     grobelinHorde: GrobelinHorde;
     spiderHorde: SpiderHorde;
     pathfinder: Pathfinder;
+    damageResolver: DamageResolver;
 
     constructor() {
         super();
@@ -55,6 +58,8 @@ export class Level extends AbstractState {
         map.createLayer('roofs');
         layer.resizeWorld();
 
+        this.damageResolver = new DamageResolver(this.game);
+
         this.collisionSprites = this.game.add.physicsGroup(Phaser.Physics.ARCADE);;
         for (let o of map.objects['collision']) {
             if (o.rectangle) {
@@ -73,9 +78,9 @@ export class Level extends AbstractState {
         this.game.add.existing(this.hero);
         this.birdFlock = new BirdFlock(this.hero);
         this.game.add.existing(this.birdFlock);
-        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder, 0);
+        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder);
         this.game.add.existing(this.grobelinHorde);
-        this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder, 1);
+        this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder;
         this.game.add.existing(this.spiderHorde);
     }
 
@@ -87,36 +92,12 @@ export class Level extends AbstractState {
     }
 
     resolveWeaponsEffects() {
-        this.game.physics.arcade.overlap(this.birdFlock, this.hero.weapon, (bird: Phaser.Sprite, bullet: Phaser.Sprite) => {
-            bird.kill();
-            bullet.kill();
-        });
-        this.game.physics.arcade.overlap(this.hero, this.birdFlock, (hero: Phaser.Sprite, bird: Phaser.Sprite) => {
-            bird.kill();
-            this.hero.damage(1);
-        });
-        this.resolveBulletsVersusVulnerables(this.hero.weapon, this.grobelinHorde);
-        this.resolveBulletsVersusVulnerables(this.hero.weapon, this.spiderHorde);
-    }
-
-    resolveBulletsVersusVulnerables(weapon: Phaser.Group, vulnerables: Phaser.Group) {
-        for (let b of weapon.children) {
-            const bullet = <Phaser.Sprite>b;
-            if (bullet.exists) {
-                const bulletRect = new Phaser.Rectangle(bullet.x, bullet.y, bullet.width, bullet.height);
-                vulnerables_loop: for (let c of vulnerables.children) {
-                    const vulnerable = c as Vulnerable & Phaser.Sprite;
-                    if (vulnerable.exists) {
-                        for (let v of vulnerable.getVulnerableRectangles()) {
-                            if (bulletRect.intersects(v, 1)) {
-                                bullet.kill();
-                                vulnerable.damage(1);
-                                break vulnerables_loop;
-                            }
-                        }
-                    }
-                }
-            }
+        this.damageResolver.resolve(this.birdFlock, this.hero.weapon);
+        this.damageResolver.resolve(this.hero, this.birdFlock);
+        this.damageResolver.resolve(this.hero.weapon, this.grobelinHorde);
+        this.damageResolver.resolve(this.hero.weapon, this.spiderHorde);
+        for(let spider of this.spiderHorde.children) {
+            this.damageResolver.resolve(this.hero, (<Spider>spider).machineGun);
         }
     }
 

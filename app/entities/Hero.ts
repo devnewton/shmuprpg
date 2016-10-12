@@ -28,7 +28,7 @@ export class Hero extends Phaser.Sprite {
 
     static preload(game: Phaser.Game) {
         game.load.atlasXML('tobira', 'sprites/lpc/characters/tobira.png', 'sprites/lpc/characters/lpc.xml');
-        game.load.spritesheet('bullet', 'sprites/lpc/shootemup/effects01.png', 16, 16, 4);
+        game.load.atlasXML('bullets', 'sprites/lpc/shootemup/effects01.png', 'sprites/lpc/shootemup/bullets.xml');
     }
 
     update() {
