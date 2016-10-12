@@ -94,12 +94,12 @@ export class Level extends AbstractState {
     }
 
     resolveWeaponsEffects() {
-        this.damageResolver.resolve(this.hero.weapon, this.birdFlock);
-        this.damageResolver.resolve(this.hero, this.birdFlock);
-        this.damageResolver.resolve(this.hero.weapon, this.grobelinHorde);
-        this.damageResolver.resolve(this.hero.weapon, this.spiderHorde);
+        this.damageResolver.groupVersusGroup(this.hero.weapon, this.birdFlock);
+        this.damageResolver.spriteVersusGroup(this.hero, this.birdFlock);
+        this.damageResolver.groupVersusGroup(this.hero.weapon, this.grobelinHorde);
+        this.damageResolver.groupVersusGroup(this.hero.weapon, this.spiderHorde);
         for (let spider of this.spiderHorde.children) {
-            this.damageResolver.resolve(this.hero, (<Spider>spider).machineGun);
+            this.damageResolver.spriteVersusGroup(this.hero, (<Spider>spider).machineGun);
         }
     }
 

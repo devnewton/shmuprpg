@@ -8,26 +8,38 @@ export class DamageResolver {
         this.game = game;
     }
 
-    resolve(spriteOrGroupA: Phaser.Sprite | Phaser.Group, spriteOrGroupB: Phaser.Sprite | Phaser.Group) {
-        this.game.physics.arcade.overlap(spriteOrGroupA, spriteOrGroupB, (a: Phaser.Sprite, b: Phaser.Sprite) => {
-            const vulnerableA = a as (Phaser.Sprite & Vulnerable);
-            if (DamageResolver.checkIfSpritesIntersect(a, b)) {
-                a.damage(1);
-                b.damage(1);
+    groupVersusGroup(groupA: Phaser.Group, groupB: Phaser.Group) {
+        for (let spriteA of groupA.children) {
+            if (spriteA instanceof Phaser.Sprite) {
+                this.spriteVersusGroup(spriteA, groupB);
             }
-        });
+        }
     }
 
+    spriteVersusGroup(spriteA: Phaser.Sprite, groupB: Phaser.Group) {
+        if (spriteA.exists) {
+            for (let spriteB of groupB.children) {
+                if (spriteB instanceof Phaser.Sprite) {
+                    this.spriteVersusSprite(spriteA, spriteB);
+                }
+            }
+        }
+    }
+
+    spriteVersusSprite(spriteA: Phaser.Sprite, spriteB: Phaser.Sprite) {
+        if (spriteA.exists && spriteB.exists && DamageResolver.checkIfSpritesIntersect(spriteA, spriteB)) {
+            spriteA.damage(1);
+            spriteB.damage(1);
+        }
+    }
 
     static checkIfSpritesIntersect(a: Phaser.Sprite, b: Phaser.Sprite): boolean {
         let vulnerableRectangleOfA = DamageResolver.getVulnerableRectanglesOf(a);
         let vulnerableRectangleOfB = DamageResolver.getVulnerableRectanglesOf(b);
-        if (vulnerableRectangleOfA || vulnerableRectangleOfB) {
-            vulnerableRectangleOfA = vulnerableRectangleOfA || [new Phaser.Rectangle(a.x, a.y, a.width, a.height)];
-            vulnerableRectangleOfB = vulnerableRectangleOfB || [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
+        if (vulnerableRectangleOfA && vulnerableRectangleOfB) {
             return this.checkIfRectanglesIntersect(vulnerableRectangleOfA, vulnerableRectangleOfB);
         } else {
-            return true;
+            return false;
         }
     }
 

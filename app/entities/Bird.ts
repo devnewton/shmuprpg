@@ -1,6 +1,7 @@
 /// <reference path="../../typings/phaser.d.ts"/>
+import {Vulnerable} from "./features/Vulnerable.ts";
 
-export class Bird extends Phaser.Sprite {
+export class Bird extends Phaser.Sprite implements Vulnerable {
 
     birdExplosion: Phaser.Sprite;
 
@@ -17,6 +18,10 @@ export class Bird extends Phaser.Sprite {
         this.birdExplosion.exists = false;
         const explodeAnimation = this.birdExplosion.animations.add('explode');
         explodeAnimation.killOnComplete = true;
+    }
+
+    getVulnerableRectangles(): Array<Phaser.Rectangle> {
+        return [new Phaser.Rectangle(this.x, this.y, this.width, this.height)];
     }
 
     fly(fromX: number, fromY: number, angle: number) {
