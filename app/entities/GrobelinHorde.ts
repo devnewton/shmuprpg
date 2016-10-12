@@ -14,7 +14,12 @@ export class GrobelinHorde extends Phaser.Group {
     constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxGrobelins: number = 4) {
         super(target.game);
         this.pathfinder = pathFinder;
+        this.reset(target, maxGrobelins);
+    }
+
+    reset(target: Phaser.Sprite, maxGrobelins: number = 4) {
         this.target = target;
+        this.removeAll();
         for (let i = 0; i < maxGrobelins; ++i) {
             this.add(this.createGrobelin());
         }

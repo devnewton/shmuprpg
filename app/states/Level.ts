@@ -6,8 +6,6 @@ import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
 import {SpiderHorde} from "../entities/SpiderHorde.ts";
 import {Spider} from "../entities/Spider.ts";
 
-import {Vulnerable} from "../entities/features/Vulnerable.ts";
-
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import {DamageResolver} from "../utils/DamageResolver.ts";
 
@@ -76,12 +74,16 @@ export class Level extends AbstractState {
 
         this.hero = new Hero(this.game);
         this.game.add.existing(this.hero);
-        this.birdFlock = new BirdFlock(this.hero);
+        this.birdFlock = new BirdFlock(this.hero, 0);
         this.game.add.existing(this.birdFlock);
-        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder);
+        this.grobelinHorde = new GrobelinHorde(this.hero, this.pathfinder, 0);
         this.game.add.existing(this.grobelinHorde);
-        this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder;
+        this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder, 0);
         this.game.add.existing(this.spiderHorde);
+
+        this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
+        this.game.time.events.add(60000, () => this.spiderHorde.reset(this.hero, 4));
+        this.game.time.events.add(12000, () => this.birdFlock.reset(this.hero, 10));
     }
 
     update() {
@@ -92,11 +94,11 @@ export class Level extends AbstractState {
     }
 
     resolveWeaponsEffects() {
-        this.damageResolver.resolve(this.birdFlock, this.hero.weapon);
+        this.damageResolver.resolve(this.hero.weapon, this.birdFlock);
         this.damageResolver.resolve(this.hero, this.birdFlock);
         this.damageResolver.resolve(this.hero.weapon, this.grobelinHorde);
         this.damageResolver.resolve(this.hero.weapon, this.spiderHorde);
-        for(let spider of this.spiderHorde.children) {
+        for (let spider of this.spiderHorde.children) {
             this.damageResolver.resolve(this.hero, (<Spider>spider).machineGun);
         }
     }

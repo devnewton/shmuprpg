@@ -9,7 +9,12 @@ export class BirdFlock extends Phaser.Group {
 
     constructor(target: Phaser.Sprite, maxBirds: number = 10) {
         super(target.game);
+        this.reset(target, maxBirds);
+    }
+
+    reset(target: Phaser.Sprite, maxBirds: number = 10) {
         this.target = target;
+        this.removeAll();
         for (let i = 0; i < maxBirds; ++i) {
             this.add(this.createBird());
         }

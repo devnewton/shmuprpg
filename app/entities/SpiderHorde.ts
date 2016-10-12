@@ -14,6 +14,11 @@ export class SpiderHorde extends Phaser.Group {
     constructor(target: Phaser.Sprite, pathFinder: Pathfinder, maxSpiders: number = 4) {
         super(target.game);
         this.pathfinder = pathFinder;
+        this.reset(target, maxSpiders);
+
+    }
+
+    reset(target: Phaser.Sprite, maxSpiders: number = 4) {
         this.target = target;
         for (let i = 0; i < maxSpiders; ++i) {
             this.add(this.createSpider());
