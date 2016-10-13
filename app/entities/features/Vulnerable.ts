@@ -2,6 +2,4 @@
 
 export interface Vulnerable {
     getVulnerableRectangles(): Array<Phaser.Rectangle>;
-
-
 }

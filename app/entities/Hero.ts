@@ -3,10 +3,11 @@ import { ShmuprpgGame } from "../ShmuprpgGame.ts";
 import { MachineGun } from "./MachineGun.ts";
 import { Controls } from "../utils/Controls.ts";
 import {Vulnerable} from "./features/Vulnerable.ts";
+import {Bullet} from "./Bullet.ts";
 
 export class Hero extends Phaser.Sprite implements Vulnerable {
 
-    weapon: MachineGun;
+    weapon: HeroMachineGun;
     controls: Controls;
 
     constructor(game: Phaser.Game) {
@@ -23,7 +24,7 @@ export class Hero extends Phaser.Sprite implements Vulnerable {
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.body.setSize(16, 16, 24, 48);
         this.body.collideWorldBounds = true;
-        this.weapon = new MachineGun(this.game);
+        this.weapon = new HeroMachineGun(this.game);
         this.game.add.existing(this.weapon);
     }
 
@@ -84,5 +85,11 @@ export class Hero extends Phaser.Sprite implements Vulnerable {
             }
         }
         return this;
+    }
+}
+
+class HeroMachineGun extends MachineGun {
+    createBullet(): Bullet {
+        return new Bullet(this.game, 'bullet.blue');
     }
 }

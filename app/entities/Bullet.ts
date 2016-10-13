@@ -4,9 +4,12 @@ import {Vulnerable} from "./features/Vulnerable.ts";
 
 export class Bullet extends Phaser.Sprite implements Vulnerable {
 
-    constructor(game: Phaser.Game) {
-        super(game, 0, 0, 'bullets');
-        (<ShmuprpgGame>game).addSpriteAnimation(this, 'bullet.red', 4);
+    bulletAnimation: string;
+
+    constructor(game: Phaser.Game, animation = 'bullet.red', atlas = 'bullets') {
+        super(game, 0, 0, atlas);
+        this.bulletAnimation = animation;
+        (<ShmuprpgGame>game).addSpriteAnimation(this, this.bulletAnimation, 4);
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.anchor.setTo(0.5, 0.5);
         this.checkWorldBounds = true;
@@ -24,6 +27,6 @@ export class Bullet extends Phaser.Sprite implements Vulnerable {
         this.game.physics.arcade.velocityFromRotation(angle, speed, this.body.velocity);
         this.angle = angle;
         this.body.gravity.set(gravityX, gravityY);
-        this.play('bullet.red', 4, true);
+        this.play(this.bulletAnimation, 4, true);
     }
 }
