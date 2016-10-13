@@ -6,6 +6,9 @@ import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
 import {SpiderHorde} from "../entities/SpiderHorde.ts";
 import {Spider} from "../entities/Spider.ts";
 
+import {Vulnerable} from "../entities/features/Vulnerable.ts";
+
+
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import {DamageResolver} from "../utils/DamageResolver.ts";
 
@@ -81,9 +84,12 @@ export class Level extends AbstractState {
         this.spiderHorde = new SpiderHorde(this.hero, this.pathfinder, 0);
         this.game.add.existing(this.spiderHorde);
 
+ this.game.time.events.add(1000, () => this.birdFlock.reset(this.hero, 10));
+        /*
         this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
         this.game.time.events.add(60000, () => this.spiderHorde.reset(this.hero, 4));
         this.game.time.events.add(12000, () => this.birdFlock.reset(this.hero, 10));
+        */
     }
 
     update() {
@@ -104,5 +110,11 @@ export class Level extends AbstractState {
     }
 
     render() {
+        for(let b of this.birdFlock.children) {
+            let vulnerable = <Vulnerable><any>b;
+            for(let v of vulnerable.getVulnerableRectangles()) {
+                this.game.debug.rectangle(v);
+            }
+         }
     }
 }

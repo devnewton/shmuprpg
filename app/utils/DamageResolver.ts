@@ -46,7 +46,7 @@ export class DamageResolver {
     static checkIfRectanglesIntersect(rectanglesA: Array<Phaser.Rectangle>, rectanglesB: Array<Phaser.Rectangle>): boolean {
         for (let a of rectanglesA) {
             for (let b of rectanglesB) {
-                if (a.intersects(b, 1)) {
+                if (a.intersects(b, 0)) {
                     return true;
                 }
             }

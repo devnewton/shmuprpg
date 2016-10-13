@@ -18,7 +18,8 @@ export class Bullet extends Phaser.Sprite implements Vulnerable {
     }
 
     getVulnerableRectangles(): Array<Phaser.Rectangle> {
-        return [new Phaser.Rectangle(this.x, this.y, this.width, this.height)];
+        let b = this.getBounds();
+        return [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
     }
 
     fire(fromX: number, fromY: number, angle: number, speed: number, gravityX: number, gravityY: number) {
