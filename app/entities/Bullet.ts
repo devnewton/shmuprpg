@@ -1,8 +1,7 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import { ShmuprpgGame } from "../ShmuprpgGame";
-import {Vulnerable} from "./features/Vulnerable.ts";
 
-export class Bullet extends Phaser.Sprite implements Vulnerable {
+export class Bullet extends Phaser.Sprite {
 
     bulletAnimation: string;
 
@@ -15,11 +14,6 @@ export class Bullet extends Phaser.Sprite implements Vulnerable {
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
         this.exists = false;
-    }
-
-    getVulnerableRectangles(): Array<Phaser.Rectangle> {
-        let b = this.getBounds();
-        return [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
     }
 
     fire(fromX: number, fromY: number, angle: number, speed: number, gravityX: number, gravityY: number) {

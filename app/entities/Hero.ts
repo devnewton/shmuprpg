@@ -2,10 +2,9 @@
 import { ShmuprpgGame } from "../ShmuprpgGame.ts";
 import { MachineGun } from "./MachineGun.ts";
 import { Controls } from "../utils/Controls.ts";
-import {Vulnerable} from "./features/Vulnerable.ts";
 import {Bullet} from "./Bullet.ts";
 
-export class Hero extends Phaser.Sprite implements Vulnerable {
+export class Hero extends Phaser.Sprite {
 
     weapon: HeroMachineGun;
     controls: Controls;
@@ -26,11 +25,6 @@ export class Hero extends Phaser.Sprite implements Vulnerable {
         this.body.collideWorldBounds = true;
         this.weapon = new HeroMachineGun(this.game);
         this.game.add.existing(this.weapon);
-    }
-
-    getVulnerableRectangles(): Array<Phaser.Rectangle> {
-        let b = this.getBounds();
-        return [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
     }
 
     static preload(game: Phaser.Game) {

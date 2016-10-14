@@ -2,10 +2,9 @@
 import {Level} from "../states/Level.ts";
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import * as b3 from "../ia/decisions/b3.ts";
-import {Vulnerable} from "./features/Vulnerable.ts";
 import {MachineGun} from "./MachineGun.ts";
 
-export class Spider extends Phaser.Sprite implements Vulnerable {
+export class Spider extends Phaser.Sprite {
 
     spiderDeath: Phaser.Sprite;
     enemy: Phaser.Sprite;
@@ -28,11 +27,6 @@ export class Spider extends Phaser.Sprite implements Vulnerable {
         this.spiderDeath.anchor.setTo(0.5, 0.5);
         this.spiderDeath.exists = false;
         this.machineGun = new MachineGun(this.game, 1);
-    }
-
-    getVulnerableRectangles(): Array<Phaser.Rectangle> {
-        let b = this.getBounds();
-        return [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
     }
 
     appears(fromX: number, fromY: number, target: Phaser.Sprite) {

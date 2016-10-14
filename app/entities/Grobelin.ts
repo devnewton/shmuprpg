@@ -2,9 +2,8 @@
 import {Level} from "../states/Level.ts";
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import * as b3 from "../ia/decisions/b3.ts";
-import {Vulnerable} from "./features/Vulnerable.ts";
 
-export class Grobelin extends Phaser.Sprite implements Vulnerable {
+export class Grobelin extends Phaser.Sprite {
 
     grobelinDeath: Phaser.Sprite;
     enemy: Phaser.Sprite;
@@ -25,11 +24,6 @@ export class Grobelin extends Phaser.Sprite implements Vulnerable {
         this.grobelinDeath = this.game.add.sprite(this.x, this.y, 'grobelin');
         this.grobelinDeath.anchor.setTo(0.5, 0.5);
         this.grobelinDeath.exists = false;
-    }
-
-    getVulnerableRectangles(): Array<Phaser.Rectangle> {
-        let b = this.getBounds();
-        return [new Phaser.Rectangle(b.x, b.y, b.width, b.height)];
     }
 
     appears(fromX: number, fromY: number, target: Phaser.Sprite) {
