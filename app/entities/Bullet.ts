@@ -14,6 +14,8 @@ export class Bullet extends Phaser.Sprite {
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
         this.exists = false;
+        this.health = 0;
+        this.alive = false;
     }
 
     fire(fromX: number, fromY: number, angle: number, speed: number, gravityX: number, gravityY: number) {

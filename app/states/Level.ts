@@ -91,7 +91,6 @@ export class Level extends AbstractState {
 
     update() {
         this.pathfinder.update();
-        this.hero.update();
         this.game.physics.arcade.collide(this.hero, this.collisionSprites);
         this.resolveWeaponsEffects();
     }
