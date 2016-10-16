@@ -25,5 +25,6 @@ export class MachineGun extends Phaser.Group {
                 bullet.fire(fromX, fromY, angle, this.bulletSpeed, 0, 0);
                 this.nextFireTime = this.game.time.time + this.fireRate;
             }
+        }
     }
 }
