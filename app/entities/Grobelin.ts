@@ -32,7 +32,7 @@ export class Grobelin extends Phaser.Sprite {
         const beforeGrobelinAnimation = beforeGrobelin.animations.add('appears');
         beforeGrobelinAnimation.onComplete.add(() => {
             beforeGrobelin.destroy();
-            this.reset(fromX, fromY, 50);
+            this.reset(fromX, fromY, 30);
             this.body.setSize(16, 16, 24, 48);
             this.body.collideWorldBounds = true;
             this.blackboard = new GrobelinBlackboard();
@@ -43,7 +43,9 @@ export class Grobelin extends Phaser.Sprite {
 
     kill(): Phaser.Sprite {
         super.kill();
-        this.damageTween.stop(true);
+        if (this.damageTween) {
+            this.damageTween.stop(true);
+        }
         this.tint = 0xFFFFFF;
         this.grobelinDeath.reset(this.x, this.y);
         this.grobelinDeath.animations.play("lpc.hurt", 6, false).killOnComplete = true;
@@ -156,7 +158,7 @@ class ActionFollowPath extends b3.Action<Grobelin, GrobelinBlackboard> {
             }
         } else {
             let path = t.blackboard.path || [];
-           t.blackboard.currentPathPointTarget =  path.shift();
+            t.blackboard.currentPathPointTarget = path.shift();
             if (path.length == 0) {
                 me.body.velocity.x = 0;
                 me.body.velocity.y = 0;
@@ -203,7 +205,7 @@ class ActionFollowPath extends b3.Action<Grobelin, GrobelinBlackboard> {
 }
 
 class ActionSearchAPathToEnemy extends b3.Action<Grobelin, GrobelinBlackboard> {
-    
+
     thinking = new b3.BlackboardKey<boolean>();
 
     tick(t: b3.Tick<Grobelin, GrobelinBlackboard>): b3.NodeState {

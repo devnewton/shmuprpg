@@ -1,7 +1,7 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import {Bullet} from "./Bullet.ts";
 
-export class MachineGun extends Phaser.Group {
+export class CircularGun extends Phaser.Group {
 
     bulletSpeed = 600;
     fireRate = 200;

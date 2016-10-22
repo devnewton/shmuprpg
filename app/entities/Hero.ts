@@ -1,6 +1,6 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import { ShmuprpgGame } from "../ShmuprpgGame.ts";
-import { MachineGun } from "./MachineGun.ts";
+import { CircularGun } from "./MachineGun.ts";
 import { Controls } from "../utils/Controls.ts";
 import {Bullet} from "./Bullet.ts";
 
@@ -83,7 +83,7 @@ export class Hero extends Phaser.Sprite {
     }
 }
 
-class HeroMachineGun extends MachineGun {
+class HeroMachineGun extends CircularGun {
     createBullet(): Bullet {
         return new Bullet(this.game, 'bullet.blue');
     }

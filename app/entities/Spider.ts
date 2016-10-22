@@ -2,7 +2,7 @@
 import {Level} from "../states/Level.ts";
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import * as b3 from "../ia/decisions/b3.ts";
-import {MachineGun} from "./MachineGun.ts";
+import {CircularGun} from "./MachineGun.ts";
 
 export class Spider extends Phaser.Sprite {
 
@@ -13,7 +13,7 @@ export class Spider extends Phaser.Sprite {
     private attackDangerousOffset: Phaser.Point;
     private damageTween: Phaser.Tween;
     private blackboard: SpiderBlackboard;
-    machineGun: MachineGun;
+    machineGun: CircularGun;
 
     constructor(game: Phaser.Game, pathfinder: Pathfinder) {
         super(game, 0, 0, 'spider');
@@ -26,7 +26,7 @@ export class Spider extends Phaser.Sprite {
         this.spiderDeath = this.game.add.sprite(this.x, this.y, 'spider');
         this.spiderDeath.anchor.setTo(0.5, 0.5);
         this.spiderDeath.exists = false;
-        this.machineGun = new MachineGun(this.game, 1);
+        this.machineGun = new CircularGun(this.game, 1);
     }
 
     appears(fromX: number, fromY: number, target: Phaser.Sprite) {

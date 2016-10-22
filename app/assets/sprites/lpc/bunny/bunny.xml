@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TextureAtlas imagePath="bunny01.png">
+    <!-- back -->
+    <SubTexture name="bunny.stand.back0" x="0" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back0" x="0" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back1" x="32" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back2" x="64" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back3" x="96" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back4" x="128" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back5" x="160" y="32" width="32" height="32" />
+    <SubTexture name="bunny.walk.back6" x="192" y="32" width="32" height="32" />
+    <!-- left -->
+    <SubTexture name="bunny.stand.left0" x="0" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left0" x="0" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left1" x="32" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left2" x="64" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left3" x="96" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left4" x="128" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left5" x="160" y="96" width="32" height="32" />
+    <SubTexture name="bunny.walk.left6" x="192" y="96" width="32" height="32" />
+    <!-- front -->
+    <SubTexture name="bunny.stand.front0" x="0" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front0" x="0" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front1" x="32" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front2" x="64" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front3" x="96" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front4" x="128" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front5" x="160" y="0" width="32" height="32" />
+    <SubTexture name="bunny.walk.front6" x="192" y="0" width="32" height="32" />
+    <!-- right -->
+    <SubTexture name="bunny.stand.right0" x="0" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right0" x="0" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right1" x="32" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right2" x="64" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right3" x="96" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right4" x="128" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right5" x="160" y="64" width="32" height="32" />
+    <SubTexture name="bunny.walk.right6" x="192" y="64" width="32" height="32" />
+</TextureAtlas>
