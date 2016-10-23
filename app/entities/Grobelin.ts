@@ -32,7 +32,7 @@ export class Grobelin extends Phaser.Sprite {
         const beforeGrobelinAnimation = beforeGrobelin.animations.add('appears');
         beforeGrobelinAnimation.onComplete.add(() => {
             beforeGrobelin.destroy();
-            this.reset(fromX, fromY, 30);
+            this.reset(fromX, fromY, 20);
             this.body.setSize(16, 16, 24, 48);
             this.body.collideWorldBounds = true;
             this.blackboard = new GrobelinBlackboard();

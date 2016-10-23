@@ -20,6 +20,7 @@ export class SpiderHorde extends Phaser.Group {
 
     reset(target: Phaser.Sprite, maxSpiders: number = 4) {
         this.target = target;
+        this.removeAll();
         for (let i = 0; i < maxSpiders; ++i) {
             this.add(this.createSpider());
         }
