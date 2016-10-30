@@ -4,14 +4,10 @@ export class Controls {
     kb: Phaser.Keyboard;
     pad: Phaser.SinglePad;
     game: Phaser.Game;
-    keyCodeZ: number;
-    keyCodeS: number;
-    keyCodeQ: number;
-    keyCodeD: number;
-    keyCodeI: number;
-    keyCodeK: number;
-    keyCodeJ: number;
-    keyCodeL: number;
+    keyCodeUP: number;
+    keyCodeDOWN: number;
+    keyCodeLEFT: number;
+    keyCodeRIGHT: number;
 
     constructor(game: Phaser.Game) {
         this.game = game;
@@ -26,33 +22,32 @@ export class Controls {
     }
 
     useAzertyLayout() {
-        this.keyCodeZ = Phaser.KeyCode.Z;
-        this.keyCodeS = Phaser.KeyCode.S;
-        this.keyCodeQ = Phaser.KeyCode.Q;
-        this.keyCodeD = Phaser.KeyCode.D;
-        this.keyCodeI = Phaser.KeyCode.I;
-        this.keyCodeK = Phaser.KeyCode.K;
-        this.keyCodeJ = Phaser.KeyCode.J;
-        this.keyCodeL = Phaser.KeyCode.L;
+        this.keyCodeUP = Phaser.KeyCode.Z;
+        this.keyCodeDOWN = Phaser.KeyCode.S;
+        this.keyCodeLEFT = Phaser.KeyCode.Q;
+        this.keyCodeRIGHT = Phaser.KeyCode.D;
         localStorage.setItem('keyboard.layout', 'azerty');
     }
 
     useQwertyLayout() {
-        this.keyCodeZ = Phaser.KeyCode.W;
-        this.keyCodeS = Phaser.KeyCode.S;
-        this.keyCodeQ = Phaser.KeyCode.A;
-        this.keyCodeD = Phaser.KeyCode.D;
-        this.keyCodeI = Phaser.KeyCode.I;
-        this.keyCodeK = Phaser.KeyCode.K;
-        this.keyCodeJ = Phaser.KeyCode.J;
-        this.keyCodeL = Phaser.KeyCode.L;
+        this.keyCodeUP = Phaser.KeyCode.W;
+        this.keyCodeDOWN = Phaser.KeyCode.S;
+        this.keyCodeLEFT = Phaser.KeyCode.A;
+        this.keyCodeRIGHT = Phaser.KeyCode.D;
         localStorage.setItem('keyboard.layout', 'qwerty');
+    }
+
+    useOtherLayout() {
+        this.keyCodeUP = Phaser.KeyCode.UP;
+        this.keyCodeDOWN = Phaser.KeyCode.DOWN;
+        this.keyCodeLEFT = Phaser.KeyCode.LEFT;
+        this.keyCodeRIGHT = Phaser.KeyCode.RIGHT;
+        localStorage.setItem('keyboard.layout', 'other');
     }
 
     shootingAngle(shooterX: number, shooterY: number): number {
         return this.firstNonNull(this.shootingAngleFromPointer(shooterX, shooterY)
-            , this.shootingAngleFromPad(),
-            this.shootingFromKeyboard());
+            , this.shootingAngleFromPad());
     }
 
     private firstNonNull<T>(...values: T[]): T {
@@ -69,7 +64,7 @@ export class Controls {
         if (pointer.isDown) {
             return Phaser.Math.angleBetween(shooterX, shooterY, pointer.worldX, pointer.worldY);
         } else {
-            return this.shootingFromKeyboard();
+            return null;
         }
     }
 
@@ -85,50 +80,30 @@ export class Controls {
         }
     }
 
-    private shootingFromKeyboard(): number {
-        let dx = 0;
-        if (this.kb.isDown(this.keyCodeJ)) {
-            dx = -1;
-        } else if (this.kb.isDown(this.keyCodeL)) {
-            dx = 1;
-        }
-        let dy = 0;
-        if (this.kb.isDown(this.keyCodeI)) {
-            dy = -1;
-        } else if (this.kb.isDown(this.keyCodeK)) {
-            dy = 1;
-        }
-        if (dx != 0 || dy != 0) {
-            return Phaser.Math.angleBetween(0, 0, dx, dy);
-        } else {
-            return null;
-        }
-    }
-
     isGoingUp(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -this.pad.deadZone
             || this.kb.isDown(Phaser.KeyCode.UP)
-            || this.kb.isDown(this.keyCodeZ);
+            || this.kb.isDown(this.keyCodeUP);
     }
     isGoingDown(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > this.pad.deadZone
             || this.kb.isDown(Phaser.KeyCode.DOWN)
-            || this.kb.isDown(this.keyCodeS);
+            || this.kb.isDown(this.keyCodeDOWN);
     }
 
     isGoingLeft(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -this.pad.deadZone
             || this.kb.isDown(Phaser.KeyCode.LEFT)
-            || this.kb.isDown(this.keyCodeQ);
+            || this.kb.isDown(this.keyCodeLEFT);
     }
 
     isGoingRight(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > this.pad.deadZone
             || this.kb.isDown(Phaser.KeyCode.RIGHT)
-            || this.kb.isDown(this.keyCodeD);
+            || this.kb.isDown(this.keyCodeRIGHT);
     }
 }
