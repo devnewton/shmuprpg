@@ -21,6 +21,10 @@ export class Controls {
         }
     }
 
+    usePad(pad: Phaser.SinglePad) {
+        this.pad = pad;
+    }
+
     useAzertyLayout() {
         this.keyCodeUP = Phaser.KeyCode.Z;
         this.keyCodeDOWN = Phaser.KeyCode.S;
