@@ -110,4 +110,9 @@ export class Controls {
             || this.kb.isDown(Phaser.KeyCode.RIGHT)
             || this.kb.isDown(this.keyCodeRIGHT);
     }
+
+    isPassDialogButtonDown(): boolean {
+        return this.game.input.activePointer.isDown
+         || this.pad.isDown(Phaser.Gamepad.XBOX360_A);
+    }
 }

@@ -10,6 +10,8 @@ import {Bunny} from "../entities/Bunny.ts";
 import {Pathfinder} from "../ia/services/Pathfinder.ts";
 import {DamageResolver} from "../utils/DamageResolver.ts";
 
+import {Dialog} from "../ui/Dialog.ts";
+
 export class Level extends AbstractState {
 
     hero: Hero;
@@ -20,6 +22,7 @@ export class Level extends AbstractState {
     pathfinder: Pathfinder;
     damageResolver: DamageResolver;
     bunnyGroup: Phaser.Group;
+    shouldCheckBunnyLiving = false;
 
     constructor() {
         super();
@@ -38,6 +41,8 @@ export class Level extends AbstractState {
         this.game.load.image('doors', 'sprites/lpc/windows-doors/doors.png');
         this.game.load.image('windows', 'sprites/lpc/windows-doors/windows.png');
         this.game.load.image('obj_misk_atlas', 'sprites/lpc/tile-atlas2/obj_misk_atlas.png');
+
+        Dialog.preload(this.game);
     }
 
     create() {
@@ -86,21 +91,50 @@ export class Level extends AbstractState {
 
         this.bunnyGroup = this.game.add.group();
 
-        this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
+        this.startDialog();
+    }
+
+    startDialog() {
+        let dialog = new Dialog(this.game, "What a beautiful day! I do not regret leaving the magic university to live in this farm with my wife, Clementine.");
+        dialog.onFinishCallback = () => {
+            dialog.text = "Speaking of her, she should be back from the forest soon. I hope she catched something good for diner.";
+            dialog.onFinishCallback = () => {
+                dialog.text = "Mmh that's strange, I am suddently feeling magic around and not a good one...";
+                dialog.onFinishCallback = () => {
+                    dialog.destroy();
+                    this.startAction();
+                }
+            }
+        }
+    }
+
+    endingDialog() {
+        let dialog = new Dialog(this.game, "What was that? It looks like somebody has invoked monsters and sent them to... me?");
+        dialog.onFinishCallback = () => {
+            dialog.text = "Clementine! I must go to the forest, maybe she is in danger!";
+            dialog.onFinishCallback = () => {
+                this.game.state.start('DemoEnding');
+            }
+        }
+    }
+
+    startAction() {
+        /*this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
         this.game.time.events.add(20 * 1000, () => this.spiderHorde.reset(this.hero, 4));
         this.game.time.events.add(40 * 1000, () => this.birdFlock.reset(this.hero, 10));
         this.game.time.events.add(60 * 1000, () => {
             this.birdFlock.flyRate = Number.MAX_VALUE;
             this.spiderHorde.appearsRate = Number.MAX_VALUE;
             this.grobelinHorde.appearsRate = Number.MAX_VALUE;
-        });
-        this.game.time.events.add(80 * 1000, () => {
+        });*/
+        this.game.time.events.add(8/*0*/ * 1000, () => {
             for (let i = 0; i < 4; ++i) {
                 let pos = this.pathfinder.randomWalkablePos();
                 let bunny = new Bunny(this.game, this.pathfinder);
                 bunny.appears(pos.x, pos.y);
                 this.bunnyGroup.add(bunny);
             }
+            this.shouldCheckBunnyLiving = true;
         });
     }
 
@@ -108,11 +142,17 @@ export class Level extends AbstractState {
         this.pathfinder.update();
         this.game.physics.arcade.collide(this.hero, this.collisionSprites);
         this.resolveWeaponsEffects();
+        if(this.shouldCheckBunnyLiving && this.bunnyGroup.countLiving() == 0) {
+            this.shouldCheckBunnyLiving = false;
+            this.game.time.events.add(3 * 1000, () => {
+                this.endingDialog();
+            });
+        }
     }
 
     resolveWeaponsEffects() {
         this.damageResolver.groupVersusGroup(this.hero.weapon, this.bunnyGroup);
-        for(let bunny of this.bunnyGroup.children) {
+        for (let bunny of this.bunnyGroup.children) {
             this.damageResolver.spriteVersusGroup(this.hero, (<Bunny>bunny).weapon);
         }
         this.damageResolver.spriteVersusGroup(this.hero, this.birdFlock);

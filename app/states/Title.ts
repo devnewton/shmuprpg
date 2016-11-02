@@ -22,5 +22,6 @@ export class Title extends AbstractState {
 
         new MenuButton(this.game, "Start", 500, 300, () => this.game.state.start('Level'));
         new MenuButton(this.game, "Options", 500, 450, () => this.game.state.start('Options'));
+        new MenuButton(this.game, "Help", 500, 600, () => this.game.state.start('Help'));
     }
 }

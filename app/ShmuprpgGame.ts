@@ -1,6 +1,8 @@
 /// <reference path="../typings/phaser.d.ts"/>
 import {Intro} from "./states/Intro.ts";
 import {Title} from "./states/Title.ts";
+import {DemoEnding} from "./states/DemoEnding.ts";
+import {Help} from "./states/Help.ts";
 import {Options} from "./states/Options.ts";
 import {KeyboardOptions} from "./states/KeyboardOptions.ts";
 import {GamepadOptions} from "./states/GamepadOptions.ts";
@@ -19,11 +21,13 @@ export class ShmuprpgGame extends Phaser.Game {
         });
         this.state.add('Intro', Intro);
         this.state.add('Title', Title);
+        this.state.add('Help', Help);
         this.state.add('Options', Options);
         this.state.add('KeyboardOptions', KeyboardOptions);
         this.state.add('GamepadOptions', GamepadOptions);
         this.state.add('Level', Level);
         this.state.add('GameOver', GameOver);
+        this.state.add('DemoEnding', DemoEnding);
     }
 
     preloadGame() {
