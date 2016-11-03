@@ -1,4 +1,6 @@
-Brunch with TypeScript
-======================
+Shmuprpg
+========
 
-Just a minimal [Brunch.io](http://brunch.io) skeleton which comes with a [TypeScript](http://www.typescriptlang.org) setup.
+Shmuprpg is a game mixing action rpg and shoot them up gameplays.
+
+[Play online](http://play.bci.im/shmuprpg/)
