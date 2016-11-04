@@ -119,15 +119,15 @@ export class Level extends AbstractState {
     }
 
     startAction() {
-        /*this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
+        this.game.time.events.add(1000, () => this.grobelinHorde.reset(this.hero, 3));
         this.game.time.events.add(20 * 1000, () => this.spiderHorde.reset(this.hero, 4));
         this.game.time.events.add(40 * 1000, () => this.birdFlock.reset(this.hero, 10));
         this.game.time.events.add(60 * 1000, () => {
             this.birdFlock.flyRate = Number.MAX_VALUE;
             this.spiderHorde.appearsRate = Number.MAX_VALUE;
             this.grobelinHorde.appearsRate = Number.MAX_VALUE;
-        });*/
-        this.game.time.events.add(8/*0*/ * 1000, () => {
+        });
+        this.game.time.events.add(80 * 1000, () => {
             for (let i = 0; i < 4; ++i) {
                 let pos = this.pathfinder.randomWalkablePos();
                 let bunny = new Bunny(this.game, this.pathfinder);
