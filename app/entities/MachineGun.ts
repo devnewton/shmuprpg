@@ -1,5 +1,5 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Bullet} from "./Bullet.ts";
+import {Bullet} from "./Bullet";
 
 export class CircularGun extends Phaser.Group {
 

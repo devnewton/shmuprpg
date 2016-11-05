@@ -1,14 +1,14 @@
 /// <reference path="../typings/phaser.d.ts"/>
-import {Intro} from "./states/Intro.ts";
-import {Title} from "./states/Title.ts";
-import {DemoEnding} from "./states/DemoEnding.ts";
-import {Help} from "./states/Help.ts";
-import {Options} from "./states/Options.ts";
-import {KeyboardOptions} from "./states/KeyboardOptions.ts";
-import {GamepadOptions} from "./states/GamepadOptions.ts";
-import {Level} from "./states/Level.ts";
-import {GameOver} from "./states/GameOver.ts";
-import {Controls} from "./utils/Controls.ts";
+import {Intro} from "./states/Intro";
+import {Title} from "./states/Title";
+import {DemoEnding} from "./states/DemoEnding";
+import {Help} from "./states/Help";
+import {Options} from "./states/Options";
+import {KeyboardOptions} from "./states/KeyboardOptions";
+import {GamepadOptions} from "./states/GamepadOptions";
+import {Level} from "./states/Level";
+import {GameOver} from "./states/GameOver";
+import {Controls} from "./utils/Controls";
 
 export class ShmuprpgGame extends Phaser.Game {
 

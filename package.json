@@ -9,7 +9,7 @@
     "devDependencies": {
         "auto-reload-brunch": "^2.7.1",
         "brunch": "^2.8.2",
-        "brunch-typescript": "1.8.1"
+        "brunch-typescript": "2.0.0"
     },
     "dependencies": {
         "easystarjs": "0.3.0"

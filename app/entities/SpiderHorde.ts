@@ -1,8 +1,8 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Spider} from "./Spider.ts";
-import { ShmuprpgGame } from "../ShmuprpgGame.ts";
-import { Level } from "../states/Level.ts";
-import { Pathfinder } from "../ia/services/Pathfinder.ts";
+import {Spider} from "./Spider";
+import { ShmuprpgGame } from "../ShmuprpgGame";
+import { Level } from "../states/Level";
+import { Pathfinder } from "../ia/services/Pathfinder";
 
 export class SpiderHorde extends Phaser.Group {
 

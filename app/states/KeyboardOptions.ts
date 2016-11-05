@@ -1,7 +1,7 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {AbstractState} from "./AbstractState.ts";
-import {MenuButton} from "../ui/MenuButton.ts";
-import { ShmuprpgGame } from "../ShmuprpgGame.ts";
+import {AbstractState} from "./AbstractState";
+import {MenuButton} from "../ui/MenuButton";
+import { ShmuprpgGame } from "../ShmuprpgGame";
 
 
 export class KeyboardOptions extends AbstractState {
