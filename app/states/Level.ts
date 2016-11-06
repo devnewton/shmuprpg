@@ -22,7 +22,7 @@ export class Level extends AbstractState {
     pathfinder: Pathfinder;
     damageResolver: DamageResolver;
     bunnyGroup: Phaser.Group;
-    shouldCheckBunnyLiving = false;
+    shouldCheckBunnyLiving: boolean;
 
     constructor() {
         super();
@@ -90,6 +90,8 @@ export class Level extends AbstractState {
         this.game.add.existing(this.spiderHorde);
 
         this.bunnyGroup = this.game.add.group();
+
+        this.shouldCheckBunnyLiving = false;
 
         this.startDialog();
     }
