@@ -10,6 +10,7 @@ module.exports = {
 			joinTo : 'app.css'
 		}
 	},
+	notifications: false,
 	modules : {
 		autoRequire : {
 			'app.js' : [ 'ShmuprpgApp' ]
