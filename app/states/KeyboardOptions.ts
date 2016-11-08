@@ -33,6 +33,10 @@ export class KeyboardOptions extends AbstractState {
             (<ShmuprpgGame>this.game).controls.useOtherLayout();
             this.game.state.start('Options');
         });
-        new MenuButton(this.game, "Back", 500, 750, () => this.game.state.start('Options'));
+        new MenuButton(this.game, "Custom", 500, 750, () => {
+            (<ShmuprpgGame>this.game).controls.useOtherLayout();
+            this.game.state.start('KeyboardOptionsBindKey', true, false);
+        });
+        new MenuButton(this.game, "Back", 500, 900, () => this.game.state.start('Options'));
     }
 }

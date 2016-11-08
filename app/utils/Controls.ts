@@ -4,10 +4,10 @@ export class Controls {
     kb: Phaser.Keyboard;
     pad: Phaser.SinglePad;
     game: Phaser.Game;
-    keyCodeUP: number;
-    keyCodeDOWN: number;
-    keyCodeLEFT: number;
-    keyCodeRIGHT: number;
+    keyCodeMoveUp: number;
+    keyCodeMoveDown: number;
+    keyCodeMoveLeft: number;
+    keyCodeMoveRight: number;
     keyCodeShootUp: number;
     keyCodeShootDown: number;
     keyCodeShootLeft: number;
@@ -18,10 +18,19 @@ export class Controls {
         game.input.gamepad.start();
         this.kb = game.input.keyboard;
         this.pad = game.input.gamepad.pad1;
-        if (localStorage.getItem('keyboard.layout') == 'qwerty') {
-            this.useQwertyLayout();
-        } else {
+        this.setupKeyboardLayout();
+    }
+
+    setupKeyboardLayout() {
+        let layout = localStorage.getItem('keyboard.layout');
+        if (null == layout || layout == 'azerty') {
             this.useAzertyLayout();
+        } else if (layout == 'qwerty') {
+            this.useQwertyLayout();
+        } else if (layout == 'other') {
+            this.useOtherLayout();
+        } else if (layout == 'custom') {
+            this.useCustomLayout();
         }
     }
 
@@ -30,10 +39,10 @@ export class Controls {
     }
 
     useAzertyLayout() {
-        this.keyCodeUP = Phaser.KeyCode.Z;
-        this.keyCodeDOWN = Phaser.KeyCode.S;
-        this.keyCodeLEFT = Phaser.KeyCode.Q;
-        this.keyCodeRIGHT = Phaser.KeyCode.D;
+        this.keyCodeMoveUp = Phaser.KeyCode.Z;
+        this.keyCodeMoveDown = Phaser.KeyCode.S;
+        this.keyCodeMoveLeft = Phaser.KeyCode.Q;
+        this.keyCodeMoveRight = Phaser.KeyCode.D;
         this.keyCodeShootUp = Phaser.KeyCode.I;
         this.keyCodeShootDown = Phaser.KeyCode.K;
         this.keyCodeShootLeft = Phaser.KeyCode.J;
@@ -42,10 +51,10 @@ export class Controls {
     }
 
     useQwertyLayout() {
-        this.keyCodeUP = Phaser.KeyCode.W;
-        this.keyCodeDOWN = Phaser.KeyCode.S;
-        this.keyCodeLEFT = Phaser.KeyCode.A;
-        this.keyCodeRIGHT = Phaser.KeyCode.D;
+        this.keyCodeMoveUp = Phaser.KeyCode.W;
+        this.keyCodeMoveDown = Phaser.KeyCode.S;
+        this.keyCodeMoveLeft = Phaser.KeyCode.A;
+        this.keyCodeMoveRight = Phaser.KeyCode.D;
         this.keyCodeShootUp = Phaser.KeyCode.I;
         this.keyCodeShootDown = Phaser.KeyCode.K;
         this.keyCodeShootLeft = Phaser.KeyCode.J;
@@ -54,15 +63,27 @@ export class Controls {
     }
 
     useOtherLayout() {
-        this.keyCodeUP = Phaser.KeyCode.UP;
-        this.keyCodeDOWN = Phaser.KeyCode.DOWN;
-        this.keyCodeLEFT = Phaser.KeyCode.LEFT;
-        this.keyCodeRIGHT = Phaser.KeyCode.RIGHT;
+        this.keyCodeMoveUp = Phaser.KeyCode.UP;
+        this.keyCodeMoveDown = Phaser.KeyCode.DOWN;
+        this.keyCodeMoveLeft = Phaser.KeyCode.LEFT;
+        this.keyCodeMoveRight = Phaser.KeyCode.RIGHT;
         this.keyCodeShootUp = Phaser.KeyCode.I;
         this.keyCodeShootDown = Phaser.KeyCode.K;
         this.keyCodeShootLeft = Phaser.KeyCode.J;
         this.keyCodeShootRight = Phaser.KeyCode.L;
         localStorage.setItem('keyboard.layout', 'other');
+    }
+
+    useCustomLayout() {
+        this.keyCodeMoveUp = parseInt(localStorage.getItem('keyboard.layout.custom.moveUp')) || Phaser.KeyCode.UP;
+        this.keyCodeMoveDown = parseInt(localStorage.getItem('keyboard.layout.custom.moveDown')) || Phaser.KeyCode.DOWN;
+        this.keyCodeMoveLeft = parseInt(localStorage.getItem('keyboard.layout.custom.moveLeft')) || Phaser.KeyCode.LEFT;
+        this.keyCodeMoveRight = parseInt(localStorage.getItem('keyboard.layout.custom.moveRight')) || Phaser.KeyCode.RIGHT;
+        this.keyCodeShootUp = parseInt(localStorage.getItem('keyboard.layout.custom.shootUp')) || Phaser.KeyCode.I;
+        this.keyCodeShootDown = parseInt(localStorage.getItem('keyboard.layout.custom.shootDown')) || Phaser.KeyCode.K;
+        this.keyCodeShootLeft = parseInt(localStorage.getItem('keyboard.layout.custom.shootLeft')) || Phaser.KeyCode.J;
+        this.keyCodeShootRight = parseInt(localStorage.getItem('keyboard.layout.custom.shootRight')) || Phaser.KeyCode.L;
+        localStorage.setItem('keyboard.layout', 'custom');
     }
 
     shootingAngle(shooterX: number, shooterY: number): number {
@@ -123,24 +144,24 @@ export class Controls {
     isGoingUp(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -this.pad.deadZone
-            || this.kb.isDown(this.keyCodeUP);
+            || this.kb.isDown(this.keyCodeMoveUp);
     }
     isGoingDown(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > this.pad.deadZone
-            || this.kb.isDown(this.keyCodeDOWN);
+            || this.kb.isDown(this.keyCodeMoveDown);
     }
 
     isGoingLeft(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -this.pad.deadZone
-            || this.kb.isDown(this.keyCodeLEFT);
+            || this.kb.isDown(this.keyCodeMoveLeft);
     }
 
     isGoingRight(): boolean {
         return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT)
             || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > this.pad.deadZone
-            || this.kb.isDown(this.keyCodeRIGHT);
+            || this.kb.isDown(this.keyCodeMoveRight);
     }
 
     isPassDialogButtonDown(): boolean {

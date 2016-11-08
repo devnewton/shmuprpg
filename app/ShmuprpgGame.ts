@@ -5,6 +5,7 @@ import {DemoEnding} from "./states/DemoEnding";
 import {Help} from "./states/Help";
 import {Options} from "./states/Options";
 import {KeyboardOptions} from "./states/KeyboardOptions";
+import {KeyboardOptionsBindKey} from "./states/KeyboardOptionsBindKey";
 import {GamepadOptions} from "./states/GamepadOptions";
 import {Level} from "./states/Level";
 import {GameOver} from "./states/GameOver";
@@ -24,6 +25,7 @@ export class ShmuprpgGame extends Phaser.Game {
         this.state.add('Help', Help);
         this.state.add('Options', Options);
         this.state.add('KeyboardOptions', KeyboardOptions);
+        this.state.add('KeyboardOptionsBindKey', KeyboardOptionsBindKey);
         this.state.add('GamepadOptions', GamepadOptions);
         this.state.add('Level', Level);
         this.state.add('GameOver', GameOver);
