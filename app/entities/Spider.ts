@@ -1,8 +1,8 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Level} from "../states/Level.ts";
-import {Pathfinder} from "../ia/services/Pathfinder.ts";
-import * as b3 from "../ia/decisions/b3.ts";
-import {CircularGun} from "./MachineGun.ts";
+import {Level} from "../states/Level";
+import {Pathfinder} from "../ia/services/Pathfinder";
+import * as b3 from "../ia/decisions/b3";
+import {CircularGun} from "./MachineGun";
 
 export class Spider extends Phaser.Sprite {
 

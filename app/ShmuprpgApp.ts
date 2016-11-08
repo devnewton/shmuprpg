@@ -1,3 +1,3 @@
-import { ShmuprpgGame } from "./ShmuprpgGame.ts";
+import { ShmuprpgGame } from "./ShmuprpgGame";
 
 new ShmuprpgGame();

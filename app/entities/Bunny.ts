@@ -1,8 +1,8 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {ShmuprpgGame} from "../ShmuprpgGame.ts";
-import {CircularGun} from "./CircularGun.ts";
-import {Pathfinder} from "../ia/services/Pathfinder.ts";
-import * as b3 from "../ia/decisions/b3.ts";
+import {ShmuprpgGame} from "../ShmuprpgGame";
+import {CircularGun} from "./CircularGun";
+import {Pathfinder} from "../ia/services/Pathfinder";
+import * as b3 from "../ia/decisions/b3";
 
 export class Bunny extends Phaser.Sprite {
 

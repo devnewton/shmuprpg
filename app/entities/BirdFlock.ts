@@ -1,5 +1,5 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Bird} from "./Bird.ts";
+import {Bird} from "./Bird";
 
 export class BirdFlock extends Phaser.Group {
 

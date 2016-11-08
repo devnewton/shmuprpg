@@ -1,6 +1,6 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {AbstractState} from "./AbstractState.ts";
-import {MenuButton} from "../ui/MenuButton.ts";
+import {AbstractState} from "./AbstractState";
+import {MenuButton} from "../ui/MenuButton";
 
 export class Title extends AbstractState {
 

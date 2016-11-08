@@ -1,8 +1,8 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import { ShmuprpgGame } from "../ShmuprpgGame.ts";
-import { CircularGun } from "./MachineGun.ts";
-import { Controls } from "../utils/Controls.ts";
-import {Bullet} from "./Bullet.ts";
+import { ShmuprpgGame } from "../ShmuprpgGame";
+import { CircularGun } from "./MachineGun";
+import { Controls } from "../utils/Controls";
+import {Bullet} from "./Bullet";
 
 export class Hero extends Phaser.Sprite {
 

@@ -1,6 +1,6 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import { AbstractState } from "./AbstractState.ts"; // you import only AClass
-import {MenuButton} from "../ui/MenuButton.ts";
+import { AbstractState } from "./AbstractState"; // you import only AClass
+import {MenuButton} from "../ui/MenuButton";
 
 export class GameOver extends AbstractState {
 

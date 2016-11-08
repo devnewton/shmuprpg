@@ -1,7 +1,7 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Level} from "../states/Level.ts";
-import {Pathfinder} from "../ia/services/Pathfinder.ts";
-import * as b3 from "../ia/decisions/b3.ts";
+import {Level} from "../states/Level";
+import {Pathfinder} from "../ia/services/Pathfinder";
+import * as b3 from "../ia/decisions/b3";
 
 export class Grobelin extends Phaser.Sprite {
 

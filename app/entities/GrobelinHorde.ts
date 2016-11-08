@@ -1,8 +1,8 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Grobelin} from "./Grobelin.ts";
-import { ShmuprpgGame } from "../ShmuprpgGame.ts";
-import { Level } from "../states/Level.ts";
-import { Pathfinder } from "../ia/services/Pathfinder.ts";
+import {Grobelin} from "./Grobelin";
+import { ShmuprpgGame } from "../ShmuprpgGame";
+import { Level } from "../states/Level";
+import { Pathfinder } from "../ia/services/Pathfinder";
 
 export class GrobelinHorde extends Phaser.Group {
 

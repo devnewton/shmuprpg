@@ -1,16 +1,16 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import { AbstractState } from "./AbstractState.ts";
-import { Hero } from "../entities/Hero.ts";
-import {BirdFlock} from "../entities/BirdFlock.ts";
-import {GrobelinHorde} from "../entities/GrobelinHorde.ts";
-import {SpiderHorde} from "../entities/SpiderHorde.ts";
-import {Spider} from "../entities/Spider.ts";
-import {Bunny} from "../entities/Bunny.ts";
+import { AbstractState } from "./AbstractState";
+import { Hero } from "../entities/Hero";
+import {BirdFlock} from "../entities/BirdFlock";
+import {GrobelinHorde} from "../entities/GrobelinHorde";
+import {SpiderHorde} from "../entities/SpiderHorde";
+import {Spider} from "../entities/Spider";
+import {Bunny} from "../entities/Bunny";
 
-import {Pathfinder} from "../ia/services/Pathfinder.ts";
-import {DamageResolver} from "../utils/DamageResolver.ts";
+import {Pathfinder} from "../ia/services/Pathfinder";
+import {DamageResolver} from "../utils/DamageResolver";
 
-import {Dialog} from "../ui/Dialog.ts";
+import {Dialog} from "../ui/Dialog";
 
 export class Level extends AbstractState {
 

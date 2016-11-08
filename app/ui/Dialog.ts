@@ -1,6 +1,6 @@
 /// <reference path="../../typings/phaser.d.ts"/>
-import {Controls} from "../utils/Controls.ts";
-import {ShmuprpgGame} from "../ShmuprpgGame.ts";
+import {Controls} from "../utils/Controls";
+import {ShmuprpgGame} from "../ShmuprpgGame";
 
 export class Dialog extends Phaser.Group {
     private dialogText: Phaser.Text;
