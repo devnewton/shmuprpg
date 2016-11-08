@@ -6,7 +6,7 @@ export abstract class AbstractState extends Phaser.State {
     }
 
     create() {
-        this.game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(() => this.toggleFullscreen());
+        this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(() => this.toggleFullscreen());
     }
 
     toggleFullscreen() {
