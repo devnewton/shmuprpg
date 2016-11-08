@@ -30,7 +30,7 @@ export class KeyboardOptionsBindKey extends AbstractState {
     init(binding: number = 0) {
         if (binding >= this.bindings.length) {
             this.currentBinding = 0;
-            (this.game as ShmuprpgGame).controls.useCustomLayout();
+            (this.game as ShmuprpgGame).controls.useCustomKeyboardLayout();
             this.game.state.start('KeyboardOptions');
         } else {
             this.currentBinding = binding;

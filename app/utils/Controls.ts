@@ -12,13 +12,17 @@ export class Controls {
     keyCodeShootDown: number;
     keyCodeShootLeft: number;
     keyCodeShootRight: number;
+    moveXAxis: number;
+    moveYAxis: number;
+    shootXAxis: number;
+    shootYAxis: number;
 
     constructor(game: Phaser.Game) {
         this.game = game;
         game.input.gamepad.start();
         this.kb = game.input.keyboard;
-        this.pad = game.input.gamepad.pad1;
         this.setupKeyboardLayout();
+        this.setupGamepadLayout();
     }
 
     setupKeyboardLayout() {
@@ -28,14 +32,10 @@ export class Controls {
         } else if (layout == 'qwerty') {
             this.useQwertyLayout();
         } else if (layout == 'other') {
-            this.useOtherLayout();
+            this.useOtherKeyboardLayout();
         } else if (layout == 'custom') {
-            this.useCustomLayout();
+            this.useCustomKeyboardLayout();
         }
-    }
-
-    usePad(pad: Phaser.SinglePad) {
-        this.pad = pad;
     }
 
     useAzertyLayout() {
@@ -62,7 +62,7 @@ export class Controls {
         localStorage.setItem('keyboard.layout', 'qwerty');
     }
 
-    useOtherLayout() {
+    useOtherKeyboardLayout() {
         this.keyCodeMoveUp = Phaser.KeyCode.UP;
         this.keyCodeMoveDown = Phaser.KeyCode.DOWN;
         this.keyCodeMoveLeft = Phaser.KeyCode.LEFT;
@@ -74,16 +74,57 @@ export class Controls {
         localStorage.setItem('keyboard.layout', 'other');
     }
 
-    useCustomLayout() {
-        this.keyCodeMoveUp = parseInt(localStorage.getItem('keyboard.layout.custom.moveUp')) || Phaser.KeyCode.UP;
-        this.keyCodeMoveDown = parseInt(localStorage.getItem('keyboard.layout.custom.moveDown')) || Phaser.KeyCode.DOWN;
-        this.keyCodeMoveLeft = parseInt(localStorage.getItem('keyboard.layout.custom.moveLeft')) || Phaser.KeyCode.LEFT;
-        this.keyCodeMoveRight = parseInt(localStorage.getItem('keyboard.layout.custom.moveRight')) || Phaser.KeyCode.RIGHT;
-        this.keyCodeShootUp = parseInt(localStorage.getItem('keyboard.layout.custom.shootUp')) || Phaser.KeyCode.I;
-        this.keyCodeShootDown = parseInt(localStorage.getItem('keyboard.layout.custom.shootDown')) || Phaser.KeyCode.K;
-        this.keyCodeShootLeft = parseInt(localStorage.getItem('keyboard.layout.custom.shootLeft')) || Phaser.KeyCode.J;
-        this.keyCodeShootRight = parseInt(localStorage.getItem('keyboard.layout.custom.shootRight')) || Phaser.KeyCode.L;
+    useCustomKeyboardLayout() {
+        this.keyCodeMoveUp = this.readNumberFromLocalStorage('keyboard.layout.custom.moveUp', Phaser.KeyCode.UP);
+        this.keyCodeMoveDown = this.readNumberFromLocalStorage('keyboard.layout.custom.moveDown', Phaser.KeyCode.DOWN);
+        this.keyCodeMoveLeft = this.readNumberFromLocalStorage('keyboard.layout.custom.moveLeft', Phaser.KeyCode.LEFT);
+        this.keyCodeMoveRight = this.readNumberFromLocalStorage('keyboard.layout.custom.moveRight', Phaser.KeyCode.RIGHT);
+        this.keyCodeShootUp = this.readNumberFromLocalStorage('keyboard.layout.custom.shootUp', Phaser.KeyCode.I);
+        this.keyCodeShootDown = this.readNumberFromLocalStorage('keyboard.layout.custom.shootDown', Phaser.KeyCode.K);
+        this.keyCodeShootLeft = this.readNumberFromLocalStorage('keyboard.layout.custom.shootLeft', Phaser.KeyCode.J);
+        this.keyCodeShootRight = this.readNumberFromLocalStorage('keyboard.layout.custom.shootRight', Phaser.KeyCode.L);
         localStorage.setItem('keyboard.layout', 'custom');
+    }
+
+    setupGamepadLayout() {
+        let padIndex = parseInt(localStorage.getItem('gamepad')) || 1;
+        let layout = localStorage.getItem('gamepad' + padIndex + '.layout');
+        if (null == layout || layout == 'xbox') {
+            this.useXboxLayout(padIndex);
+        } else if (layout == 'custom') {
+            this.useCustomGamepadLayout(padIndex);
+        }
+    }
+
+    useXboxLayout(padIndex: number) {
+        padIndex = padIndex || 1;
+        this.pad = this.game.input.gamepad['pad' + padIndex];
+        this.moveXAxis = Phaser.Gamepad.XBOX360_STICK_LEFT_X;
+        this.moveYAxis = Phaser.Gamepad.XBOX360_STICK_LEFT_Y;
+        this.shootXAxis = Phaser.Gamepad.XBOX360_STICK_RIGHT_X;
+        this.shootYAxis = Phaser.Gamepad.XBOX360_STICK_RIGHT_Y;
+        localStorage.setItem('gamepad', padIndex.toString());
+        localStorage.setItem('gamepad' + padIndex + '.layout', 'xbox');
+    }
+
+    useCustomGamepadLayout(padIndex: number) {
+        padIndex = padIndex || 1;
+        this.pad = this.game.input.gamepad['pad' + padIndex];
+        this.moveXAxis = this.readNumberFromLocalStorage('gamepad' + padIndex + '.layout.custom.moveXAxis', Phaser.Gamepad.XBOX360_STICK_LEFT_X);
+        this.moveYAxis = this.readNumberFromLocalStorage('gamepad' + padIndex + '.layout.custom.moveYAxis', Phaser.Gamepad.XBOX360_STICK_LEFT_Y);
+        this.shootXAxis = this.readNumberFromLocalStorage('gamepad' + padIndex + '.layout.custom.shootXAxis', Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+        this.shootYAxis = this.readNumberFromLocalStorage('gamepad' + padIndex + '.layout.custom.shootYAxis', Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+        localStorage.setItem('gamepad', padIndex.toString());
+        localStorage.setItem('gamepad' + padIndex + '.layout', 'custom');
+    }
+
+    readNumberFromLocalStorage(key: string, defaultValue: number) {
+        let i = parseInt(localStorage.getItem(key));
+        if (isNaN(i)) {
+            return defaultValue;
+        } else {
+            return i;
+        }
     }
 
     shootingAngle(shooterX: number, shooterY: number): number {
@@ -110,8 +151,8 @@ export class Controls {
     }
 
     private shootingAngleFromPad(): number {
-        let dx = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-        let dy = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+        let dx = this.pad.axis(this.shootXAxis);
+        let dy = this.pad.axis(this.shootYAxis);
         dx = Math.abs(dx) <= this.pad.deadZone ? 0 : dx;
         dy = Math.abs(dy) <= this.pad.deadZone ? 0 : dy;
         if (dx != 0 || dy != 0) {
@@ -142,25 +183,21 @@ export class Controls {
     }
 
     isGoingUp(): boolean {
-        return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)
-            || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -this.pad.deadZone
+        return this.pad.axis(this.moveYAxis) < -this.pad.deadZone
             || this.kb.isDown(this.keyCodeMoveUp);
     }
     isGoingDown(): boolean {
-        return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN)
-            || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > this.pad.deadZone
+        return this.pad.axis(this.moveYAxis) > this.pad.deadZone
             || this.kb.isDown(this.keyCodeMoveDown);
     }
 
     isGoingLeft(): boolean {
-        return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT)
-            || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -this.pad.deadZone
+        return this.pad.axis(this.moveXAxis) < -this.pad.deadZone
             || this.kb.isDown(this.keyCodeMoveLeft);
     }
 
     isGoingRight(): boolean {
-        return this.pad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT)
-            || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > this.pad.deadZone
+        return this.pad.axis(this.moveXAxis) > this.pad.deadZone
             || this.kb.isDown(this.keyCodeMoveRight);
     }
 

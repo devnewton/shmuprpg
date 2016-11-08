@@ -1,8 +1,10 @@
 /// <reference path="../../typings/phaser.d.ts"/>
 import {AbstractState} from "./AbstractState";
 import {MenuButton} from "../ui/MenuButton";
+import {ShmuprpgGame} from "../ShmuprpgGame";
 
-export class GamepadOptions extends AbstractState {
+export class GamepadOptionsLayout extends AbstractState {
+    padIndex: number;
 
     constructor() {
         super();
@@ -12,29 +14,25 @@ export class GamepadOptions extends AbstractState {
         MenuButton.preload(this.game);
     }
 
+    init(padIndex : number) {
+        this.padIndex = padIndex || 1;
+    }
+
     create() {
         super.create();
-        let title = this.game.add.text(this.game.world.centerX, 0, 'Choose gamepad', { font: "68px monospace", fill: 'white' });
+        let title = this.game.add.text(this.game.world.centerX, 0, 'Choose gamepad layout', { font: "68px monospace", fill: 'white' });
         title.scale.x = 2;
         title.scale.y = 2;
         title.anchor.setTo(0.5, 0);
 
-        let subtitle = this.game.add.text(0, 0, 'Move stick or press button to show gamepad number', { font: "60px monospace", fill: 'white' });
-        subtitle.y = this.game.world.height - subtitle.height;
-
-        new GamepadMenuButton(this.input.gamepad.pad1, 0xFF6666, "Gamepad 1", 500, 200, () => {
-            this.game.state.start('GamepadOptionsLayout', true, false, 1);
+        new MenuButton(this.game, "Xbox", 500, 200, () => {
+            (this.game as ShmuprpgGame).controls.useXboxLayout(this.padIndex);
+            this.game.state.start('Options');
         });
-        new GamepadMenuButton(this.input.gamepad.pad2, 0x66FF66, "Gamepad 2", 500, 350, () => {
-            this.game.state.start('GamepadOptionsLayout', true, false, 2);
+        new MenuButton(this.game, "Custom", 500, 350, () => {
+            this.game.state.start('GamepadOptionsBindAxis', true, false, this.padIndex);
         });
-        new GamepadMenuButton(this.input.gamepad.pad3, 0x6666FF, "Gamepad 3", 500, 500, () => {
-            this.game.state.start('GamepadOptionsLayout', true, false, 3);
-        });
-        new GamepadMenuButton(this.input.gamepad.pad4, 0xFFFF66, "Gamepad 4", 500, 650, () => {
-            this.game.state.start('GamepadOptionsLayout', true, false, 4);
-        });
-        new MenuButton(this.game, "Back", 500, 800, () => this.game.state.start('Options'));
+        new MenuButton(this.game, "Back", 500, 500, () => this.game.state.start('Options'));
     }
 }
 
