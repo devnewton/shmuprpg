@@ -21,15 +21,15 @@ export class KeyboardOptions extends AbstractState {
         logo.scale.y = 2;
         logo.anchor.setTo(0.5, 0);
 
-        new MenuButton(this.game, "Azerty zsqd", 500, 300, () => {
+        new MenuButton(this.game, "Azerty zsqd ikjl", 500, 300, () => {
             (<ShmuprpgGame>this.game).controls.useAzertyLayout();
             this.game.state.start('Options');
         });
-        new MenuButton(this.game, "Qwerty wsad", 500, 450, () => {
+        new MenuButton(this.game, "Qwerty wsad ikjl", 500, 450, () => {
             (<ShmuprpgGame>this.game).controls.useQwertyLayout();
             this.game.state.start('Options');
         });
-        new MenuButton(this.game, "Other ⬆⬇⬅➡", 500, 600, () => {
+        new MenuButton(this.game, "Others ⬆⬇⬅➡ ikjl", 500, 600, () => {
             (<ShmuprpgGame>this.game).controls.useOtherLayout();
             this.game.state.start('Options');
         });
